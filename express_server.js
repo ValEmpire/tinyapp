@@ -6,6 +6,10 @@ const bodyParser = require("body-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
+function generateRandomString() {
+  return (Math.random() + 1).toString(36).substring(6);
+}
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -33,13 +37,9 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
+  urlDatabase[generateRandomString] = req.body
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
-
-function generateRandomString() {
-
-}
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
