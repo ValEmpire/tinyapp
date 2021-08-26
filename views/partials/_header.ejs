@@ -10,13 +10,10 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
+
+    <form class="form-inline my-2 my-lg-0" method="post" action="/login">
+      <input class="form-control mr-sm-2" name='username' type="text" placeholder="Username" aria-label="username">
+      <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</button>
+    </form>
   </nav>
 </header>
-
-<form method="post" action="/login">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter username">
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
