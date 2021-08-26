@@ -37,7 +37,12 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  urlDatabase[generateRandomString] = req.body
+
+  const key = generateRandomString();
+  const { longURL } = req.body;
+
+  // generate key and save it to the db with value of longURL
+  urlDatabase[key] = longURL;
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
