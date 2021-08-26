@@ -3,108 +3,42 @@ const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
 const expressLayouts = require('express-ejs-layouts')
+const morgan = require('morgan');
+
+// Initialize app
 const app = express();
 
+// Middlewares
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+
+// Initialize templateVars to
+
+const templateVars = {
+  urls : {},
+  getUrl : function(key) {
+    return {
+      [key] : this.urls[key],
+    }
+  }
+};
+
+app.use((req, res, next) => {
+  req.templateVars = templateVars;
+  return next();
+})
 
 // set templating engine
 app.use(expressLayouts);
 app.set('layout', './layouts')
 app.set("view engine", "ejs");
 
-
-function generateRandomString() {
-  return (Math.random() + 1).toString(36).substring(6);
-}
-
-const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
-
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-
-app.get("/urls", (req, res) => {
-  const templateVars = {
-    urls: urlDatabase,
-    username: req.cookies['username']
-  };
-  res.render("urls_index", templateVars);
-});
-
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
-});
-
-app.get("/urls/:shortURL", (req, res) => {
-
-  const { shortURL } = req.params;
-
-  const templateVars = { shortURL: shortURL, longURL: urlDatabase[shortURL] };
-  res.render("urls_show", templateVars);
-});
-
-app.post("/urls", (req, res) => {
-
-  const key = generateRandomString();
-  const { longURL } = req.body;
-
-  // generate key and save it to the db with value of longURL
-  urlDatabase[key] = longURL;
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
-});
-
-app.post("/urls/:key/delete", (req, res) => {
-  
-  // key to be deleted from params
-  const { key } = req.params;
-
-  delete urlDatabase[key];
-
-  res.redirect('/urls');
-
-});
-
-app.post("/urls/:id", (req, res) => {
-  
-  // key to be updated from params
-  const { id } = req.params;
-
-  const { longURL } = req.body;
-
-  urlDatabase[id] =  longURL;
-
-  res.redirect('/urls');
-
-});
-
-app.post("/login", (req, res) => {
-
-    res.cookie('username', req.body.username)
-
-    res.redirect('/urls')
-  
-});
-
-app.post("/logout", (req, res) => {
-
-  res.clearCookie('username');
-
-  res.redirect('/urls');
-
-});
-
-app.get("/u/:shortURL", (req, res) => {
-
-  const { shortURL } = req.params;
-
-  const longURL = urlDatabase[shortURL]
-  
-  res.redirect(longURL);
-});
+// routes
+app.use("/", require("./routes"));
+app.use("/urls", require("./routes/urls"));
+app.use("/auth", require("./routes/auth"));
+app.use("/u", require("./routes/u"));
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
