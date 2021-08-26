@@ -46,6 +46,17 @@ app.post("/urls", (req, res) => {
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
+app.post("/urls/:key/delete", (req, res) => {
+  
+  // key to be deleted from params
+  const { key } = req.params;
+
+  delete urlDatabase[key];
+
+  res.redirect('/urls');
+
+});
+
 app.get("/u/:shortURL", (req, res) => {
 
   const { shortURL } = req.params;
