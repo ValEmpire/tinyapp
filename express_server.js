@@ -2,10 +2,15 @@ const express = require("express");
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
+const expressLayouts = require('express-ejs-layouts')
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+
+// set templating engine
+app.use(expressLayouts);
+app.set('layout', './layouts')
 app.set("view engine", "ejs");
 
 
@@ -18,27 +23,15 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
-// middleware
-
-const setTemplateVar = (req, res, next) => {
-  const templateVars = {
-    username: req.cookies["username"],
-  };
-  
-  req.templateVars = templateVars;
-
-  next();
-}
-
-
-
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    urls: urlDatabase,
+    username: req.cookies['username']
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -94,6 +87,14 @@ app.post("/login", (req, res) => {
 
     res.redirect('/urls')
   
+});
+
+app.post("/logout", (req, res) => {
+
+  res.clearCookie('username');
+
+  res.redirect('/urls');
+
 });
 
 app.get("/u/:shortURL", (req, res) => {
