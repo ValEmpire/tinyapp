@@ -1,21 +1,25 @@
 const express = require("express");
+const URL = require('../models/URL');
 
 const router = express.Router();
 
 router.route("/:shortURL")
-  .get((req, res) => {
+  .get(async (req, res) => {
 
-    const { shortURL } = req.params;
+    try{
 
-    console.log(`shortURL ${shortURL} `);
+      const { shortURL } = req.params;
 
-    const { templateVars } = req;
+      const longURL = await URL.read(shortURL);
+  
+      return res.redirect(longURL);
+  
+    }catch(error){
 
-    const longURL = templateVars.getLongURL(shortURL);
+      res.cookie('error', 'Cannot find redirect url.');
 
-    console.log(`longURL ${longURL}`);
-
-    res.redirect(longURL);
+      return res.redirect(`/urls/${shortURL}`);
+    }
   });
 
 module.exports = router;

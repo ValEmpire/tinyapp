@@ -1,5 +1,5 @@
 const urls = {
-  'some' : 'https://google.com'
+  // 'some' : 'https://google.com'
 };
 
 class URL {
