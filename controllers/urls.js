@@ -1,91 +1,139 @@
+const URL = require('../models/URL');
 const { generateRandomString } = require("../utils");
 
 // 
-// Get all Url and render it to urls_index page
+// Browse Urls and render it to urls_index page
 // 
-const getUrls = (req, res) => {
+const browseURLs = async (req, res) => {
+  const { username } = req;
+  let urls = {};
 
-  const { templateVars } = req;
+  try{
+    urls = await URL.browse()
 
-  res.render("urls_index", templateVars);
+  }catch(error){
+
+    console.log(error)
+    res.cookie('error', error);
+
+  }finally{
+    return res.render("urls_index", {
+      urls,
+      username,
+    });
+  }
 }
 
 // 
-// Ge a single url with params and render it to urls_show page
+// Get a single url with params and render it to urls_show page
 // 
-const getUrl = (req, res) => {
+const readURL = async (req, res) => {
+  const { username } = req;
 
-  const { shortURL } = req.params;
+  try{
+    const { shortURL } = req.params;
 
-  const { templateVars } = req;
+    const longURL = await URL.read(shortURL);
 
-  const url = templateVars.getUrl(shortURL);
+    return res.render("urls_show", {
+      shortURL,
+      longURL,
+      username,
+    });
 
-  res.render("urls_show", url);
+  }catch(error){
+    return res.render('404', {
+      username,
+      error,
+    });
+  }
 }
 
 // 
-// render the page to create new url
+// update url with params and send success message
 // 
-const getNewUrl = (req, res) => {
+const editURL = async (req, res) => {
+  const { username } = req;
+  const { key } = req.params;
+  const { longURL } = req.body;
 
-  const { templateVars } = req;
+  try{
+    await URL.edit(key, longURL);
+    res.cookie('success', 'Updated successfully.')
 
-  res.render("urls_new", templateVars);
+  }catch(error){
+    res.cookie('error', error);
 
+  }finally{
+    return res.render('urls_show', {
+      shortURL : key,
+      longURL,
+      username,
+    });
+  }
 }
 
 // 
 // add new url
 // 
-const addUrl = (req, res) => {
-  // generate key and save it to the db with value of longURL
-  const key = generateRandomString();
-
+const addURL = async (req, res) => {
+  const { username } = req;
   const { longURL } = req.body;
 
-  const { templateVars } = req;
+  try{
+    const randomKey = generateRandomString();
 
-  templateVars.urls[key] = longURL;
-  
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
-}
+    const newURL = new URL(randomKey, longURL);
 
-// 
-// update url with params and redirect to urls page
-// 
-const updateUrl = (req, res) => {
-  // key to be updated from params
-  const { id } = req.params;
+    await newURL.add();
 
-  const { longURL } = req.body;
+    res.cookie('success', `${randomKey} added successfully.`)
 
-  req.templateVars[id] = longURL;
+  }catch(error){
+    res.cookie('error', error);
 
-  res.redirect('/urls');
+  }finally{
+    return res.redirect('/urls');
+  }
 }
 
 // 
 // delete url then redirect to urls page
 // 
-const deleteUrl = (req, res) => {
-  // key to be deleted from params
+const deleteURL = async (req, res) => {
   const { key } = req.params;
 
-  const { templateVars } = req;
+  try{
+    await URL.delete(key);
 
-  delete templateVars.urls[key];
+    res.cookie('success', `${key} has been deleted.`)
 
-  console.log(templateVars)
+  }catch(error){
+    res.cookie('error', error)
 
-  res.redirect('/urls');
+  }finally{
+    return res.redirect('/urls');
+  }
+}
+
+// 
+// render the page to create new url
+// 
+const renderAddURLPage = (req, res) => {
+
+  const { username } = req;
+
+  res.render("urls_new", {
+    username,
+  });
+
 }
 
 module.exports = { 
-  getUrls,
-  getUrl,
-  addUrl,
-  updateUrl,
-  getNewUrl,
-  deleteUrl,
+  browseURLs,
+  readURL,
+  editURL,
+  addURL,
+  deleteURL,
+  renderAddURLPage,
 };

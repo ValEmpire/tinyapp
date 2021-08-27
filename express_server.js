@@ -13,22 +13,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
-// Initialize templateVars to
-
-const templateVars = {
-  urls : {},
-  getUrl : function(key) {
-    return {
-      [key] : this.urls[key],
-    }
-  }
-};
-
-app.use((req, res, next) => {
-  req.templateVars = templateVars;
-  return next();
-})
-
 // set templating engine
 app.use(expressLayouts);
 app.set('layout', './layouts')

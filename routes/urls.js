@@ -7,29 +7,29 @@ const { getUsername } = require("../custom_middlewares");
 
 // CONTROLLERS
 const { 
-  getUrls,
-  getNewUrl,
-  addUrl,
-  updateUrl,
-  getUrl,
-  deleteUrl
+  browseURLs,
+  readURL,
+  editURL,
+  addURL,
+  deleteURL,
+  renderAddURLPage,
 } = require("../controllers/urls");
 
 router.route("/")
-  .get(getUsername, getUrls)
-  .post(addUrl);
+  .get(getUsername, browseURLs)
+  .post(addURL);
 
-router.route("/urls/:id")
-  .post(updateUrl);
+router.route("/:key")
+  .post(editURL);
 
 router.route("/new")
-  .get(getUsername, getNewUrl);
+  .get(getUsername, renderAddURLPage);
 
 router.route("/:shortURL")
-  .get(getUsername, getUrl);
+  .get(getUsername, readURL);
 
 router.route("/:key/delete")
-  .post(deleteUrl);
+  .post(deleteURL);
 
   
 

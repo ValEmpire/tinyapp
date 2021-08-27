@@ -1,6 +1,6 @@
 const getUsername = (req, res, next) => {
 
-  req.templateVars["username"] = req.cookies['username']
+  req["username"] = req.cookies['username']
 
   next();
 }
