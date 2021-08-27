@@ -11,8 +11,22 @@ const validateEmail = (email) => {
   }
 }
 
+const getUserCookie = (req) => {
+  return req.cookies["user"];
+}
+
+const setUserCookie = (res, user) => {
+  return res.cookie('user', user);
+}
+
+const clearUserCookie = (res) => {
+  res.clearCookie('user');
+}
 
 module.exports = {
   generateRandomString,
-  validateEmail
+  validateEmail,
+  getUserCookie,
+  setUserCookie,
+  clearUserCookie
 }

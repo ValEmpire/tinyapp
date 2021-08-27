@@ -2,38 +2,30 @@ const express = require("express");
 
 const router = express.Router();
 
+const { getUser } = require("../custom_middlewares");
+
 // Controllers
-const { addUser } = require("../controllers/users");
+const {
+  addUser,
+  readUser,
+  renderLoginPage,
+  renderRegistrationPage,
+  logout,
+} = require("../controllers/users");
 
 router
     .route("/login")
-    .post((req, res) => {
-
-      res.cookie('user', req.body.user)
-  
-      res.redirect('/urls')
-  });
+    .get(getUser, renderLoginPage)
+    .post(readUser);
 
 router
   .route("/registration")
-  .get((req, res) => {
-    res.render('registration', {
-      user : null
-    });
-});
-
-router
-  .route("/registration")
+  .get(getUser, renderRegistrationPage)
   .post(addUser);
+
 
 router
   .route("/logout")
-  .post((req, res) => {
-
-    res.clearCookie('user');
-  
-    res.redirect('/registration');
-  
-  });
+  .post(logout);
 
 module.exports = router;

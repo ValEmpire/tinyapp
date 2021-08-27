@@ -12,10 +12,11 @@ const users = {
 }
 
 class User {
-  constructor(id, email, password){
-    this.id = id;
-    this.email = email;
-    this.password = password;
+
+  constructor() {
+    this.findUser = this.findUser.bind(this);
+    this.read = this.read.bind(this);
+    this.add = this.add.bind(this);
   }
 
   // Iterate objects of objects and look for the same email
@@ -29,8 +30,9 @@ class User {
     return null;
   }
 
-  static read = (email) => {
+  read = (email) => {
     return new Promise((resolve, reject) => {
+
       const user = this.findUser(email);
 
       resolve(user);
@@ -38,29 +40,29 @@ class User {
     });
   }
 
-  add = () => {
+  add = ({id, email, password}) => {
 
     return new Promise((resolve, reject) => {
 
-      const user = this.findUser(this.email);
+      const user = this.findUser(email);
 
       if(user){
         reject(new Error('User already exists.'))
         return;
       }
 
-      users[this.id] = {
-        id : this.id,
-        email : this.email,
-        password : this.password,
+      users[id] = {
+        id,
+        email,
+        password,
       }
 
-      resolve(users[this.id]);
+      resolve(users[id]);
       return;
     });
   }
-
-
 }
 
-module.exports = User;
+const NewUser = new User();
+
+module.exports = NewUser;

@@ -1,5 +1,10 @@
 const User = require('../models/User');
-const { generateRandomString, validateEmail } = require('../utils')
+const {
+  generateRandomString,
+  validateEmail,
+  setUserCookie,
+  clearUserCookie,
+} = require('../utils')
 
 const addUser = async(req, res) => {
   try{
@@ -14,20 +19,87 @@ const addUser = async(req, res) => {
 
     const id = generateRandomString();
 
-    const user = new User(id, email, password);
+    const user = await User.add({id, email, password});
 
-    await user.add();
-
-    res.cookie('user', user)
+    setUserCookie(res, user)
 
     res.redirect('/urls');
+
+    return;
 
   }catch(error){
 
     res.cookie('error', error.message)
 
     res.redirect('registration');
+
+    return;
   }
 }
 
-module.exports = { addUser };
+const readUser = async(req, res) => {
+  try{
+
+    const { email , password } = req.body;
+
+    const user = await User.read(email);
+
+    if(user.password !== password) throw new Error('Incorrect credentials.');
+
+    setUserCookie(res, user);
+
+    res.redirect('/urls');
+
+    return;
+
+  }catch(error){
+
+    console.log(error);
+
+    res.cookie('error', error.message)
+
+    res.redirect('login');
+
+    return;
+  }
+}
+
+const renderLoginPage = async(req, res) => {
+
+  if(req.user) {
+    res.redirect('/urls');
+
+    return;
+  }
+
+  res.render('login', {
+    user : null
+  })
+
+  return;
+}
+
+const renderRegistrationPage = (req, res) => {
+
+  if(req.user) {
+    res.redirect('/urls');
+
+    return;
+  }
+
+  res.render('registration', {
+    user : null
+  })
+
+  return;
+}
+
+const logout = (req, res) => {
+
+  clearUserCookie(res);
+
+  res.redirect('/registration');
+
+}
+
+module.exports = { addUser, readUser, renderLoginPage, renderRegistrationPage, logout };

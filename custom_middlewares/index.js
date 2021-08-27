@@ -1,6 +1,8 @@
+const { getUserCookie } = require('../utils');
+
 const getUser = (req, res, next) => {
 
-  req["user"] = req.cookies["user"]
+  req["user"] = getUserCookie(req);
 
   next();
 }
