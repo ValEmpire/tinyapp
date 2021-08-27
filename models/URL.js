@@ -1,14 +1,27 @@
 const urls = {
-  // 'some' : 'https://google.com'
+  /*
+
+  where the key is the short url
+
+  b6UTxQ: {
+    longURL: "https://www.tsn.ca",
+    userID: "aJ48lW"
+  }
+
+  */
 };
 
 class URL {
-  constructor(key, value) {
-    this.key = key;
-    this.value = value;
+  constructor() {
+    this.browse = this.browse.bind(this);
+    this.read = this.read.bind(this);
+    this.edit = this.edit.bind(this);
+    this.add = this.add.bind(this);
+    this.delete = this.delete.bind(this);
+    this.findURLsByUserID = this.findURLsByUserID.bind(this);
   };
 
-  static browse = () => {
+  browse = () => {
     return new Promise((resolve, reject) => {
 
       if(urls === undefined) {
@@ -21,7 +34,7 @@ class URL {
     });
   };
 
-  static read = (key) => {
+  read = (key) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
@@ -37,7 +50,7 @@ class URL {
     });
   };
 
-  static edit = (key, value) => {
+  edit = (key, value) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
@@ -48,29 +61,33 @@ class URL {
       }
 
       resolve(
-        urls[key] = value
+        url['longURL'] = value,
       );
       return;
 
     });
   };
 
-  add = () => {
+  add = ({key, longURL, userID}) => {
     return new Promise((resolve, reject) => {
 
-      const url = urls[this.key];
+      const url = urls[key];
 
       if(url !== undefined) {
-        reject(new Error(`${this.key} already exists.`));
+        reject(new Error(`${key} already exists.`));
         return;
       }
 
-      resolve(urls[this.key] = this.value);
+      resolve(urls[key] = {
+        longURL,
+        userID,
+      });
+
       return;
     });
   };
 
-  static delete = (key) => {
+  delete = (key) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
@@ -86,6 +103,25 @@ class URL {
     });
   };
 
+
+
+
+  findURLsByUserID = (userID) => {
+    return new Promise((resolve, reject) =>{
+
+      let result = {};
+
+      for(const key in urls){
+        if(urls[key].userID === userID){
+          result[key] = urls[key]; 
+        }
+      }
+
+      resolve(result);
+    })
+  }
 }
 
-module.exports = URL;
+const NewURL = new URL();
+
+module.exports = NewURL;

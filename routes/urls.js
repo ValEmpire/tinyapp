@@ -17,21 +17,16 @@ const {
 
 router.route("/")
   .get(getUser, browseURLs)
-  .post(addURL);
-
-router.route("/:key")
-  .post(editURL);
+  .post(getUser, addURL);
 
 router.route("/new")
   .get(getUser, renderAddURLPage);
 
-router.route("/:shortURL")
+router.route("/:key")
+  .post(getUser, editURL)
   .get(getUser, readURL);
 
 router.route("/:key/delete")
-  .post(deleteURL);
-
-  
-
+  .post(getUser, deleteURL);
 
 module.exports = router;

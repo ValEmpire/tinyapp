@@ -1,5 +1,6 @@
 const URL = require('../models/URL');
-const { generateRandomString } = require("../utils");
+const User = require('../models/User');
+const { generateRandomString, setMessageCookie } = require("../utils");
 
 // 
 // Browse Urls and render it to urls_index page
@@ -12,11 +13,10 @@ const browseURLs = async (req, res) => {
     urls = await URL.browse()
 
   }catch(error){
-
-    console.log(error)
-    res.cookie('error', error);
+    setMessageCookie(res, 'error', error.message);
 
   }finally{
+
     return res.render("urls_index", {
       urls,
       user,
@@ -29,19 +29,20 @@ const browseURLs = async (req, res) => {
 // 
 const readURL = async (req, res) => {
   const { user } = req;
+  const { key } = req.params;
 
   try{
-    const { shortURL } = req.params;
 
-    const longURL = await URL.read(shortURL);
+    const url = await URL.read(key);
 
     return res.render("urls_show", {
-      shortURL,
-      longURL,
+      shortURL : key,
+      longURL : url.longURL,
       user,
     });
 
   }catch(error){
+
     return res.render('404', {
       user,
       error,
@@ -59,10 +60,11 @@ const editURL = async (req, res) => {
 
   try{
     await URL.edit(key, longURL);
-    res.cookie('success', 'Updated successfully.')
+
+    setMessageCookie(res, 'success', 'Updated successfully.');
 
   }catch(error){
-    res.cookie('error', error);
+    setMessageCookie(res, 'error', error.message.message);
 
   }finally{
     return res.render('urls_show', {
@@ -78,21 +80,26 @@ const editURL = async (req, res) => {
 // 
 const addURL = async (req, res) => {
   const { longURL } = req.body;
+  const { user } = req;
 
   try{
     const randomKey = generateRandomString();
 
-    const newURL = new URL(randomKey, longURL);
+    await URL.add({ key : randomKey, longURL, userID : user.id});
 
-    await newURL.add();
+    setMessageCookie(res, 'success', `${randomKey} created successfully.`)
 
-    res.cookie('success', `${randomKey} added successfully.`)
+    res.redirect('/urls');
+
+    return;
 
   }catch(error){
-    res.cookie('error', error);
+    setMessageCookie(res, 'error', error.message);
 
-  }finally{
-    return res.redirect('/urls');
+    res.redirect('/urls');
+
+    return;
+
   }
 }
 
@@ -105,10 +112,11 @@ const deleteURL = async (req, res) => {
   try{
     await URL.delete(key);
 
-    res.cookie('success', `${key} has been deleted.`)
+    setMessageCookie(res, 'success', `${key} deleted successfully`);
 
   }catch(error){
-    res.cookie('error', error)
+
+    setMessageCookie(res, 'error', error.message);
 
   }finally{
     return res.redirect('/urls');
@@ -125,6 +133,8 @@ const renderAddURLPage = (req, res) => {
   res.render("urls_new", {
     user,
   });
+
+  return;
 
 }
 

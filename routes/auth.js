@@ -15,12 +15,12 @@ const {
 
 router
     .route("/login")
-    .get(getUser, renderLoginPage)
+    .get(renderLoginPage)
     .post(readUser);
 
 router
   .route("/registration")
-  .get(getUser, renderRegistrationPage)
+  .get(renderRegistrationPage)
   .post(addUser);
 
 

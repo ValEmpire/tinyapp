@@ -1,34 +1,20 @@
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark bg-success">
-    <a class="navbar-brand" href="/urls">TinyApp</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav mr-auto">
-        <a class="nav-item nav-link" href="/urls">My URLs</a>
-        <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+  <nav class="navbar navbar-expand-md navbar-dark bg-info">
+    <div class="container">
+      <a class="navbar-brand" href="/urls">TinyApp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link" href="/urls">My URLs</a>
+          <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+        </div>
+          <form class="form-inline my-2 my-lg-0" method="post" action="/logout">
+            <span class='mr-1 pr-1'><%= user.email %></span>
+            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Logout</button>
+          </form>
       </div>
-
-      <!--
-        check if user exists
-        the user variable is passed from server object
-
-        if user exists render the user else render the login form
-      -->
-      <% if(!user){ %>
-
-        <span></span>
-
-      <% } else{ %>  
-
-        <form class="form-inline my-2 my-lg-0" method="post" action="/logout">
-          <span>Logged in as: <%= user.email %>! </span>
-          <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Logout</button>
-        </form>
-
-      <% } %>
-
     </div>
   </nav>
 </header>

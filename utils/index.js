@@ -19,7 +19,19 @@ const setUserCookie = (res, user) => {
   return res.cookie('user', user);
 }
 
+const setMessageCookie = (res, type, message) => {
+  var date = new Date();
+  date.setTime(date.getTime() + (1000));
+  return res.cookie(type, message, { expires : date });
+}
+
+const clearMessageCookie = (res) => {
+  res.clearCookie('error');
+  res.clearCookie('success');
+}
+
 const clearUserCookie = (res) => {
+  clearMessageCookie(res);
   res.clearCookie('user');
 }
 
@@ -28,5 +40,7 @@ module.exports = {
   validateEmail,
   getUserCookie,
   setUserCookie,
-  clearUserCookie
+  clearUserCookie,
+  setMessageCookie,
+  clearMessageCookie,
 }

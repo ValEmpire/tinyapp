@@ -4,13 +4,14 @@ const {
   validateEmail,
   setUserCookie,
   clearUserCookie,
+  setMessageCookie,
 } = require('../utils')
 
 const addUser = async(req, res) => {
+
+  const { email , password } = req.body;
+
   try{
-
-    const { email , password } = req.body;
-
     const isValidEmail = validateEmail(email);
 
     if(!isValidEmail) throw new Error('Email is not valid.');
@@ -19,7 +20,7 @@ const addUser = async(req, res) => {
 
     const id = generateRandomString();
 
-    const user = await User.add({id, email, password});
+    const user = await User.add({id, email:email.toLowerCase(), password});
 
     setUserCookie(res, user)
 
@@ -29,22 +30,21 @@ const addUser = async(req, res) => {
 
   }catch(error){
 
-    res.cookie('error', error.message)
+    setMessageCookie(res, 'error', error.message);
 
-    res.redirect('registration');
+    res.render('registration', { email , password});
 
     return;
   }
 }
 
 const readUser = async(req, res) => {
+  const { email , password } = req.body;
+
   try{
-
-    const { email , password } = req.body;
-
     const user = await User.read(email);
 
-    if(user.password !== password) throw new Error('Incorrect credentials.');
+    if(!user || user.password !== password) throw new Error('Incorrect credentials.');
 
     setUserCookie(res, user);
 
@@ -54,42 +54,22 @@ const readUser = async(req, res) => {
 
   }catch(error){
 
-    console.log(error);
+    setMessageCookie(res, 'error', error.message);
 
-    res.cookie('error', error.message)
-
-    res.redirect('login');
+    res.render('login', { email, password });
 
     return;
   }
 }
 
 const renderLoginPage = async(req, res) => {
-
-  if(req.user) {
-    res.redirect('/urls');
-
-    return;
-  }
-
-  res.render('login', {
-    user : null
-  })
+  res.render('login')
 
   return;
 }
 
 const renderRegistrationPage = (req, res) => {
-
-  if(req.user) {
-    res.redirect('/urls');
-
-    return;
-  }
-
-  res.render('registration', {
-    user : null
-  })
+  res.render('registration')
 
   return;
 }
