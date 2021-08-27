@@ -7,7 +7,7 @@ const { getUser } = require("../custom_middlewares");
 
 // CONTROLLERS
 const { 
-  browseURLs,
+  browseURLsByUserID,
   readURL,
   editURL,
   addURL,
@@ -16,7 +16,7 @@ const {
 } = require("../controllers/urls");
 
 router.route("/")
-  .get(getUser, browseURLs)
+  .get(getUser, browseURLsByUserID)
   .post(getUser, addURL);
 
 router.route("/new")

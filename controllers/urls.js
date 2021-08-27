@@ -1,5 +1,4 @@
 const URL = require('../models/URL');
-const User = require('../models/User');
 const { generateRandomString, setMessageCookie } = require("../utils");
 
 // 
@@ -11,6 +10,25 @@ const browseURLs = async (req, res) => {
 
   try{
     urls = await URL.browse()
+
+  }catch(error){
+    setMessageCookie(res, 'error', error.message);
+
+  }finally{
+
+    return res.render("urls_index", {
+      urls,
+      user,
+    });
+  }
+}
+
+const browseURLsByUserID = async (req, res) => {
+  const { user } = req;
+  let urls = {};
+
+  try{
+    urls = await URL.browseURLsByUserID(user.id);
 
   }catch(error){
     setMessageCookie(res, 'error', error.message);
@@ -59,7 +77,7 @@ const editURL = async (req, res) => {
   const { longURL } = req.body;
 
   try{
-    await URL.edit(key, longURL);
+    await URL.edit(key, longURL, user.id);
 
     setMessageCookie(res, 'success', 'Updated successfully.');
 
@@ -108,9 +126,10 @@ const addURL = async (req, res) => {
 // 
 const deleteURL = async (req, res) => {
   const { key } = req.params;
+  const { user } = req;
 
   try{
-    await URL.delete(key);
+    await URL.delete(key, user.id);
 
     setMessageCookie(res, 'success', `${key} deleted successfully`);
 
@@ -145,4 +164,5 @@ module.exports = {
   addURL,
   deleteURL,
   renderAddURLPage,
+  browseURLsByUserID
 };

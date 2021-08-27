@@ -10,9 +10,9 @@ router.route("/:shortURL")
 
       const { shortURL } = req.params;
 
-      const longURL = await URL.read(shortURL);
+      const url = await URL.read(shortURL);
   
-      return res.redirect(longURL);
+      return res.redirect(url["longURL"]);
   
     }catch(error){
 

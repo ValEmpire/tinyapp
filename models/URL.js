@@ -18,7 +18,7 @@ class URL {
     this.edit = this.edit.bind(this);
     this.add = this.add.bind(this);
     this.delete = this.delete.bind(this);
-    this.findURLsByUserID = this.findURLsByUserID.bind(this);
+    this.browseURLsByUserID = this.browseURLsByUserID.bind(this);
   };
 
   browse = () => {
@@ -50,13 +50,18 @@ class URL {
     });
   };
 
-  edit = (key, value) => {
+  edit = (key, value, userID) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
 
       if(!url) {
         reject(new Error(`Value of ${key} is not found.`))
+        return;
+      }
+
+      if(url["userID"] !== userID) {
+        reject(new Error(`Cannot update someones url.`))
         return;
       }
 
@@ -87,7 +92,7 @@ class URL {
     });
   };
 
-  delete = (key) => {
+  delete = (key, userID) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
@@ -97,17 +102,24 @@ class URL {
         return;
       }
 
+      if(url["userID"] !== userID) {
+        reject(new Error(`Cannot delete someones url.`))
+        return;
+      }
+
       resolve(delete urls[key])
       return;
 
     });
   };
 
-
-
-
-  findURLsByUserID = (userID) => {
+  browseURLsByUserID = (userID) => {
     return new Promise((resolve, reject) =>{
+
+      if(urls === undefined) {
+        reject(new Error('Urls is undefined.'))
+        return;
+      }
 
       let result = {};
 
