@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // CUSTOM MIDDLEWARES
-const { getUsername } = require("../custom_middlewares");
+const { getUser } = require("../custom_middlewares");
 
 // CONTROLLERS
 const { 
@@ -16,17 +16,17 @@ const {
 } = require("../controllers/urls");
 
 router.route("/")
-  .get(getUsername, browseURLs)
+  .get(getUser, browseURLs)
   .post(addURL);
 
 router.route("/:key")
   .post(editURL);
 
 router.route("/new")
-  .get(getUsername, renderAddURLPage);
+  .get(getUser, renderAddURLPage);
 
 router.route("/:shortURL")
-  .get(getUsername, readURL);
+  .get(getUser, readURL);
 
 router.route("/:key/delete")
   .post(deleteURL);

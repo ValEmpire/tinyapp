@@ -1,10 +1,10 @@
-const getUsername = (req, res, next) => {
+const getUser = (req, res, next) => {
 
-  req["username"] = req.cookies['username']
+  req["user"] = req.cookies["user"]
 
   next();
 }
 
 module.exports = {
-  getUsername
+  getUser
 }

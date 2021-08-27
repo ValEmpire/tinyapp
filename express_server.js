@@ -16,12 +16,12 @@ app.use(cookieParser());
 // set templating engine
 app.use(expressLayouts);
 app.set('layout', './layouts')
+app.use( express.static( "public" ));
 app.set("view engine", "ejs");
 
 // routes
-app.use("/", require("./routes"));
+app.use("/", require("./routes/auth"));
 app.use("/urls", require("./routes/urls"));
-app.use("/auth", require("./routes/auth"));
 app.use("/u", require("./routes/u"));
 
 app.listen(PORT, () => {

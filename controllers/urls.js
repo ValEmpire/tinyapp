@@ -5,7 +5,7 @@ const { generateRandomString } = require("../utils");
 // Browse Urls and render it to urls_index page
 // 
 const browseURLs = async (req, res) => {
-  const { username } = req;
+  const { user } = req;
   let urls = {};
 
   try{
@@ -19,7 +19,7 @@ const browseURLs = async (req, res) => {
   }finally{
     return res.render("urls_index", {
       urls,
-      username,
+      user,
     });
   }
 }
@@ -28,7 +28,7 @@ const browseURLs = async (req, res) => {
 // Get a single url with params and render it to urls_show page
 // 
 const readURL = async (req, res) => {
-  const { username } = req;
+  const { user } = req;
 
   try{
     const { shortURL } = req.params;
@@ -38,12 +38,12 @@ const readURL = async (req, res) => {
     return res.render("urls_show", {
       shortURL,
       longURL,
-      username,
+      user,
     });
 
   }catch(error){
     return res.render('404', {
-      username,
+      user,
       error,
     });
   }
@@ -53,7 +53,7 @@ const readURL = async (req, res) => {
 // update url with params and send success message
 // 
 const editURL = async (req, res) => {
-  const { username } = req;
+  const { user } = req;
   const { key } = req.params;
   const { longURL } = req.body;
 
@@ -68,7 +68,7 @@ const editURL = async (req, res) => {
     return res.render('urls_show', {
       shortURL : key,
       longURL,
-      username,
+      user,
     });
   }
 }
@@ -77,7 +77,6 @@ const editURL = async (req, res) => {
 // add new url
 // 
 const addURL = async (req, res) => {
-  const { username } = req;
   const { longURL } = req.body;
 
   try{
@@ -121,10 +120,10 @@ const deleteURL = async (req, res) => {
 // 
 const renderAddURLPage = (req, res) => {
 
-  const { username } = req;
+  const { user } = req;
 
   res.render("urls_new", {
-    username,
+    user,
   });
 
 }

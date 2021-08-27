@@ -11,22 +11,19 @@
       </div>
 
       <!--
-        check if username exists
-        the username variable is passed from server object
+        check if user exists
+        the user variable is passed from server object
 
-        if username exists render the username else render the login form
+        if user exists render the user else render the login form
       -->
-      <% if(!username){ %>
+      <% if(!user){ %>
 
-        <form class="form-inline my-2 my-lg-0" method="post" action="auth/login">
-            <input class="form-control mr-sm-2" name='username' type="text" placeholder="Username" aria-label="username" required>
-            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</button>
-        </form>
+        <span></span>
 
       <% } else{ %>  
 
-        <form class="form-inline my-2 my-lg-0" method="post" action="auth/logout">
-          <span>Logged in as: <%= username %>! </span>
+        <form class="form-inline my-2 my-lg-0" method="post" action="/logout">
+          <span>Logged in as: <%= user.email %>! </span>
           <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Logout</button>
         </form>
 
