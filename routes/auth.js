@@ -24,7 +24,7 @@ router
 router
   .route("/")
   .get((req, res) => {
-    res.send("This is the HOMEPAGE!");
+    res.redirect('/login');
   });
 
 
