@@ -2,8 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-const { getUser } = require("../custom_middlewares");
-
 // Controllers
 const {
   addUser,
@@ -22,6 +20,12 @@ router
   .route("/registration")
   .get(renderRegistrationPage)
   .post(addUser);
+
+router
+  .route("/")
+  .get((req, res) => {
+    res.send("This is the HOMEPAGE!");
+  });
 
 
 router
