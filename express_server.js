@@ -3,13 +3,13 @@ const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
 const expressLayouts = require('express-ejs-layouts')
-const morgan = require('morgan');
+// const morgan = require('morgan');
 
 // Initialize app
 const app = express();
 
 // Middlewares
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
