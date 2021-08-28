@@ -1,5 +1,5 @@
 const express = require("express");
-const PORT = 8080; // default port 8080
+const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
 const expressLayouts = require('express-ejs-layouts')
@@ -25,5 +25,5 @@ app.use("/urls", require("./routes/urls"));
 app.use("/u", require("./routes/u"));
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`tinyURL is listening on ${PORT}!`);
 });
