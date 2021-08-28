@@ -16,9 +16,10 @@ router.route("/:shortURL")
   
     }catch(error){
 
-      res.cookie('error', 'Cannot find redirect url.');
-
-      return res.redirect(`/urls/${shortURL}`);
+      return res.render('404', {
+        error : `Cannot find redirect url.`,
+        backURL : '/login'
+      });
     }
   });
 

@@ -64,6 +64,7 @@ const readURL = async (req, res) => {
     return res.render('404', {
       user,
       error,
+      backURL: '/urls'
     });
   }
 }
