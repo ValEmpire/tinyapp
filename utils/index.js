@@ -35,6 +35,15 @@ const clearUserCookie = (res) => {
   res.clearCookie('user');
 }
 
+const fixLongURL = (longURL) => {
+  var prefix = 'http://';
+  if (longURL.substr(0, prefix.length) !== prefix) {
+    longURL = prefix + s;
+  }
+
+  return longURL;
+}
+
 module.exports = {
   generateRandomString,
   validateEmail,
@@ -43,4 +52,5 @@ module.exports = {
   clearUserCookie,
   setMessageCookie,
   clearMessageCookie,
+  fixLongURL
 }

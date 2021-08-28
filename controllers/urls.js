@@ -1,5 +1,5 @@
 const URL = require('../models/URL');
-const { generateRandomString, setMessageCookie } = require("../utils");
+const { generateRandomString, setMessageCookie, fixLongURL } = require("../utils");
 
 // 
 // Browse Urls and render it to urls_index page
@@ -78,7 +78,7 @@ const editURL = async (req, res) => {
   const { longURL } = req.body;
 
   try{
-    await URL.edit(key, longURL, user.id);
+    await URL.edit(key, fixLongURL(longURL), user.id);
 
     setMessageCookie(res, 'success', 'Updated successfully.');
 
@@ -104,7 +104,11 @@ const addURL = async (req, res) => {
   try{
     const randomKey = generateRandomString();
 
-    await URL.add({ key : randomKey, longURL, userID : user.id});
+    await URL.add({
+      key : randomKey,
+      longURL :  fixLongURL(longURL),
+      userID : user.id,
+    });
 
     setMessageCookie(res, 'success', `${randomKey} created successfully.`)
 
