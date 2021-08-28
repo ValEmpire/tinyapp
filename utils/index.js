@@ -38,7 +38,7 @@ const clearUserCookie = (res) => {
 const fixLongURL = (longURL) => {
   var prefix = 'http://';
   if (longURL.substr(0, prefix.length) !== prefix) {
-    longURL = prefix + s;
+    longURL = prefix + longURL;
   }
 
   return longURL;
