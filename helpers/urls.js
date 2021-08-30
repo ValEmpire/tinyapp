@@ -5,7 +5,7 @@ const {
   fixLongURL
 } = require("../utils");
 
-const browseURLsByUserIDHelper = async ({ userID }) => {
+const getURLSByUserID = async ({ userID }) => {
   try{
     const urls = await URL.browseURLsByUserID(userID);
 
@@ -20,7 +20,7 @@ const browseURLsByUserIDHelper = async ({ userID }) => {
   }
 }
 
-const readURLHelper = async ({ key }) => {
+const getURLByKey = async ({ key }) => {
   try{
     const url = await URL.read(key);
 
@@ -35,7 +35,7 @@ const readURLHelper = async ({ key }) => {
   }
 }
 
-const editURLHelper = async ({ key, userID, longURL }) => {
+const editURLByKey = async ({ key, userID, longURL }) => {
   try{
     const url = await URL.edit(key, fixLongURL(longURL), userID);
 
@@ -50,7 +50,7 @@ const editURLHelper = async ({ key, userID, longURL }) => {
   }
 }
 
-const addURLHelper = async ({ longURL, userID }) => {
+const addURL = async ({ longURL, userID }) => {
   try{
     const randomKey = generateRandomString();
 
@@ -74,7 +74,7 @@ const addURLHelper = async ({ longURL, userID }) => {
 // 
 // delete url then redirect to urls page
 // 
-const deleteURLHelper = async ({ key, userID }) => {
+const deleteURL = async ({ key, userID }) => {
   try{
     await URL.delete(key, userID);
 
@@ -89,9 +89,9 @@ const deleteURLHelper = async ({ key, userID }) => {
 }
 
 module.exports = { 
-  browseURLsByUserIDHelper,
-  readURLHelper,
-  editURLHelper,
-  addURLHelper,
-  deleteURLHelper,
+  getURLSByUserID,
+  getURLByKey,
+  editURLByKey,
+  addURL,
+  deleteURL,
 };

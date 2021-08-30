@@ -7,26 +7,26 @@ const { getUser } = require("../custom_middlewares");
 
 // CONTROLLERS
 const { 
-  browseURLsByUserID,
-  readURL,
-  editURL,
-  addURL,
-  deleteURL,
-  renderAddURLPage,
+  browseURLsByUserIDController,
+  readURLController,
+  editURLController,
+  addURLController,
+  deleteURLController,
+  renderAddURLPageController,
 } = require("../controllers/urls");
 
 router.route("/")
-  .get(getUser, browseURLsByUserID)
-  .post(getUser, addURL);
+  .get(getUser, browseURLsByUserIDController)
+  .post(getUser, addURLController);
 
 router.route("/new")
-  .get(getUser, renderAddURLPage);
+  .get(getUser, renderAddURLPageController);
 
 router.route("/:key")
-  .post(getUser, editURL)
-  .get(getUser, readURL);
+  .post(getUser, editURLController)
+  .get(getUser, readURLController);
 
 router.route("/:key/delete")
-  .post(getUser, deleteURL);
+  .post(getUser, deleteURLController);
 
 module.exports = router;

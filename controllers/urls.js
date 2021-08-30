@@ -1,19 +1,19 @@
 const { 
-  browseURLsByUserIDHelper,
-  readURLHelper,
-  editURLHelper,
-  addURLHelper,
-  deleteURLHelper,
+  getURLSByUserID,
+  getURLByKey,
+  editURLByKey,
+  addURL,
+  deleteURL,
 } = require('../helpers/urls');
 
 const {
   setMessageCookie,
 } = require("../utils");
 
-const browseURLsByUserID = async (req, res) => {
+const browseURLsByUserIDController = async (req, res) => {
   const { user } = req;
 
-  const { urls, error } = await browseURLsByUserIDHelper({ userID : user.id });
+  const { urls, error } = await getURLSByUserID({ userID : user.id });
 
   if(error){
     setMessageCookie(res, 'error', error);
@@ -33,11 +33,11 @@ const browseURLsByUserID = async (req, res) => {
 // 
 // Get a single url with params and render it to urls_show page
 // 
-const readURL = async (req, res) => {
+const readURLController = async (req, res) => {
   const { user } = req;
   const { key } = req.params;
 
-  const { url, error } = await readURLHelper({ key });
+  const { url, error } = await getURLByKey({ key });
 
   if(error) {
     return res.render('404', {
@@ -57,12 +57,12 @@ const readURL = async (req, res) => {
 // 
 // update url with params and send success message
 // 
-const editURL = async (req, res) => {
+const editURLController = async (req, res) => {
   const { user } = req;
   const { key } = req.params;
   const { longURL } = req.body;
 
-  const { error } = await editURLHelper({ key, userID:user.id, longURL });
+  const { error } = await editURLByKey({ key, userID:user.id, longURL });
 
   if(error){
     setMessageCookie(res, 'error', error);
@@ -86,11 +86,11 @@ const editURL = async (req, res) => {
 // 
 // add new url
 // 
-const addURL = async (req, res) => {
+const addURLController = async (req, res) => {
   const { longURL } = req.body;
   const { user } = req;
 
-  const { url, error } = await addURLHelper({ longURL, userID : user.id });
+  const { url, error } = await addURL({ longURL, userID : user.id });
 
   if(error){
     setMessageCookie(res, 'error', error);
@@ -105,11 +105,11 @@ const addURL = async (req, res) => {
 // 
 // delete url then redirect to urls page
 // 
-const deleteURL = async (req, res) => {
+const deleteURLController = async (req, res) => {
   const { key } = req.params;
   const { user } = req;
 
-  const { error } = await deleteURLHelper({key, userID : user.id});
+  const { error } = await deleteURL({key, userID : user.id});
 
   if(error) {
     setMessageCookie(res, 'error', error);
@@ -124,7 +124,7 @@ const deleteURL = async (req, res) => {
 // 
 // render the page to create new url
 // 
-const renderAddURLPage = (req, res) => {
+const renderAddURLPageController = (req, res) => {
 
   const { user } = req;
 
@@ -134,10 +134,10 @@ const renderAddURLPage = (req, res) => {
 }
 
 module.exports = { 
-  readURL,
-  editURL,
-  addURL,
-  deleteURL,
-  renderAddURLPage,
-  browseURLsByUserID
+  readURLController,
+  editURLController,
+  addURLController,
+  deleteURLController,
+  renderAddURLPageController,
+  browseURLsByUserIDController
 };
