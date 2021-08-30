@@ -6,6 +6,7 @@ const {
   clearUserCookie,
   setMessageCookie,
   hashPassword,
+  clearMessageCookie,
   comparePassword,
 } = require('../utils')
 
@@ -24,7 +25,7 @@ const addUser = async(req, res) => {
 
     const user = await User.add({id, email:email.toLowerCase(), password : hashPassword(password)});
 
-    setUserCookie(res, user)
+    setUserCookie(req, user)
 
     res.redirect('/urls');
 
@@ -48,7 +49,7 @@ const readUser = async(req, res) => {
 
     if(!user || !comparePassword(password, user.password)) throw new Error('Incorrect credentials.');
 
-    setUserCookie(res, user);
+    setUserCookie(req, user);
 
     res.redirect('/urls');
 
@@ -80,9 +81,11 @@ const renderRegistrationPage = (req, res) => {
 
 const logout = (req, res) => {
 
-  clearUserCookie(res);
+  clearMessageCookie(res);
 
-  res.redirect('/registration');
+  clearUserCookie(req);
+
+  res.redirect('/login');
 
 }
 

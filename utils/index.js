@@ -22,11 +22,11 @@ const validateEmail = (email) => {
 }
 
 const getUserCookie = (req) => {
-  return req.cookies["user"];
+  return req.session["userID"];
 }
 
-const setUserCookie = (res, user) => {
-  return res.cookie('user', user);
+const setUserCookie = (req, user) => {
+  return req.session.userID = user.id;
 }
 
 const setMessageCookie = (res, type, message) => {
@@ -40,9 +40,8 @@ const clearMessageCookie = (res) => {
   res.clearCookie('success');
 }
 
-const clearUserCookie = (res) => {
-  clearMessageCookie(res);
-  res.clearCookie('user');
+const clearUserCookie = (req) => {
+  req.session = null;
 }
 
 const fixLongURL = (longURL) => {

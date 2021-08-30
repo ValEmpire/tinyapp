@@ -3,13 +3,13 @@ const User = require("../models/User")
 
 const getUser = async (req, res, next) => {
   try{
-    const userCookie = getUserCookie(req);
+    const userID = getUserCookie(req);
 
-    if(!userCookie) throw new Error('No cookie found.');
+    if(!userID) throw new Error('Only login users can access protected route.');
   
-    const user = await User.read(userCookie["email"]);
+    const user = await User.readById(userID);
   
-    if (!user) throw new Error('Cannot find user with given cookie.')
+    if (!user) throw new Error('Invalid or expired cookie.')
   
     req["user"] = user;
   

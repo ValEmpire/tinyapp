@@ -30,10 +30,31 @@ class User {
     return null;
   }
 
+  // Iterate objects of objects and look for the same email
+  findUserById = (id) => {
+    for(const ids in users){
+      if(users[ids]["id"] === id){
+        return users[ids];
+      }
+    }
+
+    return null;
+  }
+
   read = (email) => {
     return new Promise((resolve, reject) => {
 
       const user = this.findUser(email);
+
+      resolve(user);
+      return;
+    });
+  }
+
+  readById = (id) => {
+    return new Promise((resolve, reject) => {
+
+      const user = this.findUserById(id);
 
       resolve(user);
       return;

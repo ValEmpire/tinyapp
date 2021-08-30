@@ -3,6 +3,7 @@ const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
 const expressLayouts = require('express-ejs-layouts')
+const cookieSession = require('cookie-session')
 // const morgan = require('morgan');
 
 // Initialize app
@@ -12,6 +13,10 @@ const app = express();
 // app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: [process.env.MY_SECRET_KEY || 'mySecretKey', process.env.MY_SECRET_KEY_2 || 'mySecretKey2']
+}));
 
 // set templating engine
 app.use(expressLayouts);
