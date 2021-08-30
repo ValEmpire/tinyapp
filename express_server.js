@@ -25,6 +25,7 @@ app.use( express.static( "public" ));
 app.set("view engine", "ejs");
 
 // routes
+app.use("/", require("./routes/index"));
 app.use("/", require("./routes/auth"));
 app.use("/urls", require("./routes/urls"));
 app.use("/u", require("./routes/u"));

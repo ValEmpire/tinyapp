@@ -12,21 +12,14 @@ const {
 } = require("../controllers/users");
 
 router
-    .route("/login")
-    .get(renderLoginPage)
-    .post(readUser);
-
-router
   .route("/registration")
   .get(renderRegistrationPage)
   .post(addUser);
 
 router
-  .route("/")
-  .get((req, res) => {
-    res.redirect('/login');
-  });
-
+  .route("/login")
+  .get(renderLoginPage)
+  .post(readUser);
 
 router
   .route("/logout")

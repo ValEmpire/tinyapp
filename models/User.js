@@ -15,7 +15,8 @@ class User {
 
   constructor() {
     this.findUser = this.findUser.bind(this);
-    this.read = this.read.bind(this);
+    this.readByEmail = this.readByEmail.bind(this);
+    this.readById = this.readById.bind(this);
     this.add = this.add.bind(this);
   }
 
@@ -41,7 +42,7 @@ class User {
     return null;
   }
 
-  read = (email) => {
+  readByEmail = (email) => {
     return new Promise((resolve, reject) => {
 
       const user = this.findUser(email);

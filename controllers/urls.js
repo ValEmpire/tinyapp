@@ -1,45 +1,33 @@
-const URL = require('../models/URL');
-const { generateRandomString, setMessageCookie, fixLongURL } = require("../utils");
+const { 
+  browseURLsByUserIDHelper,
+  readURLHelper,
+  editURLHelper,
+  addURLHelper,
+  deleteURLHelper,
+} = require('../helpers/urls');
 
-// 
-// Browse Urls and render it to urls_index page
-// 
-const browseURLs = async (req, res) => {
-  const { user } = req;
-  let urls = {};
-
-  try{
-    urls = await URL.browse()
-
-  }catch(error){
-    setMessageCookie(res, 'error', error.message);
-
-  }finally{
-
-    return res.render("urls_index", {
-      urls,
-      user,
-    });
-  }
-}
+const {
+  setMessageCookie,
+} = require("../utils");
 
 const browseURLsByUserID = async (req, res) => {
   const { user } = req;
-  let urls = {};
 
-  try{
-    urls = await URL.browseURLsByUserID(user.id);
+  const { urls, error } = await browseURLsByUserIDHelper({ userID : user.id });
 
-  }catch(error){
-    setMessageCookie(res, 'error', error.message);
-
-  }finally{
+  if(error){
+    setMessageCookie(res, 'error', error);
 
     return res.render("urls_index", {
-      urls,
+      urls : {},
       user,
     });
   }
+
+  return res.render("urls_index", {
+    urls,
+    user,
+  });
 }
 
 // 
@@ -49,24 +37,21 @@ const readURL = async (req, res) => {
   const { user } = req;
   const { key } = req.params;
 
-  try{
+  const { url, error } = await readURLHelper({ key });
 
-    const url = await URL.read(key);
-
-    return res.render("urls_show", {
-      shortURL : key,
-      longURL : url.longURL,
-      user,
-    });
-
-  }catch(error){
-
+  if(error) {
     return res.render('404', {
       user,
       error,
       backURL: '/urls'
     });
   }
+
+  return res.render("urls_show", {
+    shortURL : key,
+    longURL : url.longURL,
+    user,
+  });
 }
 
 // 
@@ -77,21 +62,25 @@ const editURL = async (req, res) => {
   const { key } = req.params;
   const { longURL } = req.body;
 
-  try{
-    await URL.edit(key, fixLongURL(longURL), user.id);
+  const { error } = await editURLHelper({ key, userID:user.id, longURL });
 
-    setMessageCookie(res, 'success', 'Updated successfully.');
+  if(error){
+    setMessageCookie(res, 'error', error);
 
-  }catch(error){
-    setMessageCookie(res, 'error', error.message.message);
-
-  }finally{
     return res.render('urls_show', {
       shortURL : key,
       longURL,
       user,
     });
   }
+
+  setMessageCookie(res, 'success', 'Updated successfully.');
+
+  return res.render('urls_show', {
+    shortURL : key,
+    longURL,
+    user,
+  });
 }
 
 // 
@@ -101,29 +90,16 @@ const addURL = async (req, res) => {
   const { longURL } = req.body;
   const { user } = req;
 
-  try{
-    const randomKey = generateRandomString();
+  const { url, error } = await addURLHelper({ longURL, userID : user.id });
 
-    await URL.add({
-      key : randomKey,
-      longURL :  fixLongURL(longURL),
-      userID : user.id,
-    });
-
-    setMessageCookie(res, 'success', `${randomKey} created successfully.`)
-
-    res.redirect('/urls');
-
-    return;
-
-  }catch(error){
-    setMessageCookie(res, 'error', error.message);
-
-    res.redirect('/urls');
-
-    return;
-
+  if(error){
+    setMessageCookie(res, 'error', error);
+    return res.redirect('/urls');
   }
+
+  setMessageCookie(res, 'success', `${url[Object.keys(url)[0]]} created successfully.`)
+
+  return res.redirect('/urls');
 }
 
 // 
@@ -133,18 +109,16 @@ const deleteURL = async (req, res) => {
   const { key } = req.params;
   const { user } = req;
 
-  try{
-    await URL.delete(key, user.id);
+  const { error } = await deleteURLHelper({key, userID : user.id});
 
-    setMessageCookie(res, 'success', `${key} deleted successfully`);
-
-  }catch(error){
-
-    setMessageCookie(res, 'error', error.message);
-
-  }finally{
+  if(error) {
+    setMessageCookie(res, 'error', error);
     return res.redirect('/urls');
   }
+
+  setMessageCookie(res, 'success', `${key} deleted successfully`);
+
+  return res.redirect('/urls');
 }
 
 // 
@@ -154,16 +128,12 @@ const renderAddURLPage = (req, res) => {
 
   const { user } = req;
 
-  res.render("urls_new", {
+  return res.render("urls_new", {
     user,
   });
-
-  return;
-
 }
 
 module.exports = { 
-  browseURLs,
   readURL,
   editURL,
   addURL,

@@ -1,92 +1,68 @@
-const User = require('../models/User');
 const {
-  generateRandomString,
-  validateEmail,
   setUserCookie,
   clearUserCookie,
   setMessageCookie,
-  hashPassword,
   clearMessageCookie,
-  comparePassword,
-} = require('../utils')
+} = require('../utils');
 
+const {
+  registerUser,
+  getUserByEmail,
+} = require('../helpers/users');
+
+// this will add users to db with registerUser Function
+// if successful redirect to urls page
+// if error is present, set the messagecookie error then render registration page with email, password
 const addUser = async(req, res) => {
-
   const { email , password } = req.body;
 
-  try{
-    const isValidEmail = validateEmail(email);
+  const { user, error } = await registerUser({ email, password });
 
-    if(!isValidEmail) throw new Error('Email is not valid.');
-
-    if(password.length <= 5) throw new Error('Password should be atleast 6 characters long.');
-
-    const id = generateRandomString();
-
-    const user = await User.add({id, email:email.toLowerCase(), password : hashPassword(password)});
-
-    setUserCookie(req, user)
-
-    res.redirect('/urls');
-
-    return;
-
-  }catch(error){
-
-    setMessageCookie(res, 'error', error.message);
-
-    res.render('registration', { email , password});
-
-    return;
+  if (error) {
+    setMessageCookie(res, 'error', error);
+    return res.render('registration', { email , password});
   }
-}
 
+  setUserCookie(req, user);
+
+  return res.redirect('/urls');
+};
+
+// this will retrieve users from db
+// if successful redirect to urls page
+// if error is present, set the messagecookie error then render login page with email, password
 const readUser = async(req, res) => {
   const { email , password } = req.body;
 
-  try{
-    const user = await User.read(email);
+  const { user, error } = await getUserByEmail({ email, password });
 
-    if(!user || !comparePassword(password, user.password)) throw new Error('Incorrect credentials.');
-
-    setUserCookie(req, user);
-
-    res.redirect('/urls');
-
-    return;
-
-  }catch(error){
-
-    console.log(error)
-
-    setMessageCookie(res, 'error', error.message);
-
-    res.render('login', { email, password });
-
-    return;
+  if (error) {
+    setMessageCookie(res, 'error', error);
+    return res.render('login', { email, password });
   }
+
+  setUserCookie(req, user);
+
+  return res.redirect('/urls');
 }
 
+// This will render login page
 const renderLoginPage = async(req, res) => {
-  res.render('login')
-
-  return;
+  return res.render('login')
 }
 
+// THis will render registration page
 const renderRegistrationPage = (req, res) => {
-  res.render('registration')
-
-  return;
+  return res.render('registration')
 }
 
+// this will redirect to login page after clearning message cookies and users session
 const logout = (req, res) => {
-
   clearMessageCookie(res);
 
   clearUserCookie(req);
 
-  res.redirect('/login');
-
+  return res.redirect('/login');
 }
 
 module.exports = { addUser, readUser, renderLoginPage, renderRegistrationPage, logout };

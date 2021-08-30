@@ -83,10 +83,12 @@ class URL {
         return;
       }
 
-      resolve(urls[key] = {
+      urls[key] = {
         longURL,
         userID,
-      });
+      };
+
+      resolve(urls[key]);
 
       return;
     });
