@@ -5,6 +5,8 @@ const {
   setUserCookie,
   clearUserCookie,
   setMessageCookie,
+  hashPassword,
+  comparePassword,
 } = require('../utils')
 
 const addUser = async(req, res) => {
@@ -20,7 +22,7 @@ const addUser = async(req, res) => {
 
     const id = generateRandomString();
 
-    const user = await User.add({id, email:email.toLowerCase(), password});
+    const user = await User.add({id, email:email.toLowerCase(), password : hashPassword(password)});
 
     setUserCookie(res, user)
 
@@ -44,7 +46,7 @@ const readUser = async(req, res) => {
   try{
     const user = await User.read(email);
 
-    if(!user || user.password !== password) throw new Error('Incorrect credentials.');
+    if(!user || !comparePassword(password, user.password)) throw new Error('Incorrect credentials.');
 
     setUserCookie(res, user);
 
@@ -53,6 +55,8 @@ const readUser = async(req, res) => {
     return;
 
   }catch(error){
+
+    console.log(error)
 
     setMessageCookie(res, 'error', error.message);
 

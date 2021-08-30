@@ -1,3 +1,13 @@
+const bcrypt = require('bcrypt');
+
+const hashPassword = (password) => {
+  return bcrypt.hashSync(password, 10);
+}
+
+const comparePassword = (password, hashedPassword) => {
+  return bcrypt.compareSync(password, hashedPassword);
+}
+
 const generateRandomString = () => {
   return (Math.random() + 1).toString(36).substring(6);
 }
@@ -52,5 +62,7 @@ module.exports = {
   clearUserCookie,
   setMessageCookie,
   clearMessageCookie,
-  fixLongURL
+  fixLongURL,
+  hashPassword,
+  comparePassword,
 }
