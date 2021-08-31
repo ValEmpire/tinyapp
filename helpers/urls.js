@@ -1,8 +1,8 @@
-const URL = require('../models/URL');
+const { URL } = require('../models/URL');
 
 const {
   generateRandomString,
-  fixLongURL
+  appendURL
 } = require("../utils");
 
 const getURLSByUserID = async ({ userID }) => {
@@ -18,9 +18,9 @@ const getURLSByUserID = async ({ userID }) => {
   }
 }
 
-const getURLByKey = async ({ key }) => {
+const getURLByKey = async ({ key, userID }) => {
   try{
-    const url = await URL.read(key);
+    const url = await URL.read(key, userID);
 
     return {
       url,
@@ -31,9 +31,12 @@ const getURLByKey = async ({ key }) => {
   }
 }
 
-const editURLByKey = async ({ key, userID, longURL }) => {
+const editURL = async ({ key, userID, longURL }) => {
   try{
-    const url = await URL.edit(key, fixLongURL(longURL), userID);
+
+    const appendhttp = appendURL(longURL);
+
+    const url = await URL.edit(key, appendhttp, userID);
 
     return {
       url,
@@ -50,7 +53,7 @@ const addURL = async ({ longURL, userID }) => {
 
     const url = await URL.add({
       key : randomKey,
-      longURL :  fixLongURL(longURL),
+      longURL :  appendURL(longURL),
       userID,
     });
 
@@ -80,7 +83,7 @@ const deleteURL = async ({ key, userID }) => {
 module.exports = { 
   getURLSByUserID,
   getURLByKey,
-  editURLByKey,
+  editURL,
   addURL,
   deleteURL,
 };

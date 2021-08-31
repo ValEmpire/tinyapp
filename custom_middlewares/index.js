@@ -1,5 +1,5 @@
 const { getUserCookie, setMessageCookie } = require('../utils');
-const User = require("../models/User")
+const { User } = require("../models/User")
 
 const authUser = async (req, res, next) => {
   try{

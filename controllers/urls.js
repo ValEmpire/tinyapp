@@ -1,7 +1,7 @@
 const { 
   getURLSByUserID,
   getURLByKey,
-  editURLByKey,
+  editURL,
   addURL,
   deleteURL,
 } = require('../helpers/urls');
@@ -39,7 +39,7 @@ const readURLController = async (req, res) => {
   const { key } = req.params;
 
   try{
-    const { url } = await getURLByKey({ key });
+    const { url } = await getURLByKey({ key, userID : user.id });
 
     return res.render("urls_show", {
       shortURL : key,
@@ -65,7 +65,7 @@ const editURLController = async (req, res) => {
   const { longURL } = req.body;
 
   try{
-    await editURLByKey({ key, userID:user.id, longURL });
+    await editURL({ key, userID:user.id, longURL });
 
     setMessageCookie(res, 'success', 'Updated successfully.');
 

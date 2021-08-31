@@ -1,14 +1,25 @@
 const urls = {
-  /*
 
-  where the key is the short url
+  abc01: {
+    longURL: "https://www.facebook.com",
+    userID: "val02"
+  },
 
-  b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "aJ48lW"
-  }
+  abc02: {
+    longURL: "https://www.stockoverflow.com",
+    userID: "val02"
+  },
 
-  */
+  abc03: {
+    longURL: "https://www.google.com",
+    userID: "other"
+  },
+
+  abc04: {
+    longURL: "https://www.wikipedia.org",
+    userID: "other"
+  },
+
 };
 
 class URL {
@@ -34,14 +45,18 @@ class URL {
     });
   };
 
-  read = (key) => {
+  read = (key, userID) => {
     return new Promise((resolve, reject) => {
 
       const url = urls[key];
 
-      if(!url){
+      if(!url || !userID){
         reject(new Error(`Value of ${key} is not found.`));
         return;
+      }
+
+      if(url.userID !== userID){
+        reject(new Error(`Not authorize to view someones url.`));
       }
 
       resolve(url);
@@ -65,11 +80,13 @@ class URL {
         return;
       }
 
-      resolve(
-        url['longURL'] = value,
-      );
-      return;
+      url['longURL'] = value;
 
+      // return updated value
+      return resolve({
+        [key] : url,
+      });
+      
     });
   };
 
@@ -138,4 +155,7 @@ class URL {
 
 const NewURL = new URL();
 
-module.exports = NewURL;
+module.exports = {
+  URL : NewURL,
+  urls,
+};

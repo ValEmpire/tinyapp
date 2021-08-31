@@ -5,7 +5,7 @@ const {
   comparePassword,
 } = require('../utils');
 
-const User = require('../models/User');
+const { User } = require('../models/User');
 
 const registerUser = async({ email, password }) => {
 

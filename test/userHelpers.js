@@ -12,8 +12,10 @@ const {
   checkPassword
 } = require('../helpers/users');
 
+const { users } = require('../models/User');
+
 describe('registerUser', () => {
-  it('should add new user with hash password', async () => {
+  it('should add new user with hash password to the database', async () => {
 
     const input = {
       email : "val@example.com",
@@ -24,6 +26,13 @@ describe('registerUser', () => {
 
     assert.strictEqual(input.email, user.email);
     assert.notEqual(input.password, user.password);
+    assert.strictEqual(Object.keys(users).length, 3);
+  });
+
+  it('should throws an error if email or password is undefined', async () => {
+
+    await registerUser().should.be.rejectedWith(Error);
+    
   });
 });
 

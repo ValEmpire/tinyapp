@@ -66,6 +66,11 @@ class User {
 
     return new Promise((resolve, reject) => {
 
+      if(!email || !password){
+        reject(new Error(`${email? 'Password is required' : 'Email is required.'}`))
+        return;
+      }
+
       const user = this.findUser(email);
 
       if(user){
@@ -87,4 +92,7 @@ class User {
 
 const NewUser = new User();
 
-module.exports = NewUser;
+module.exports = {
+  User : NewUser,
+  users,
+};

@@ -44,13 +44,19 @@ const clearUserCookie = (req) => {
   req.session = null;
 }
 
-const fixLongURL = (longURL) => {
-  var prefix = 'http://';
-  if (longURL.substr(0, prefix.length) !== prefix) {
-    longURL = prefix + longURL;
+const appendURL = (url) => {
+
+  if(url.length <= 7){
+    return `http://${url}`;
   }
 
-  return longURL;
+  const getChars = url.substring(0, 7);
+
+  if(!getChars.includes("http")){
+    return `http://${url}`;
+  }
+
+  return url;
 }
 
 module.exports = {
@@ -61,7 +67,7 @@ module.exports = {
   clearUserCookie,
   setMessageCookie,
   clearMessageCookie,
-  fixLongURL,
+  appendURL,
   hashPassword,
   comparePassword,
 }
