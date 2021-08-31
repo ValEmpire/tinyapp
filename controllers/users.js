@@ -7,6 +7,7 @@ const {
 
 const {
   registerUser,
+  checkPassword,
   getUserByEmail,
 } = require('../helpers/users');
 
@@ -16,16 +17,18 @@ const {
 const addUser = async(req, res) => {
   const { email , password } = req.body;
 
-  const { user, error } = await registerUser({ email, password });
+  try{
+    const { user } = await registerUser({ email, password });
 
-  if (error) {
-    setMessageCookie(res, 'error', error);
+    setUserCookie(req, user);
+  
+    return res.redirect('/urls');
+
+  }catch(error){
+    setMessageCookie(res, 'error', error.message);
+
     return res.render('registration', { email , password});
   }
-
-  setUserCookie(req, user);
-
-  return res.redirect('/urls');
 };
 
 // this will retrieve users from db
@@ -34,16 +37,23 @@ const addUser = async(req, res) => {
 const readUser = async(req, res) => {
   const { email , password } = req.body;
 
-  const { user, error } = await getUserByEmail({ email, password });
+  try{
+    const { user } = await getUserByEmail({ email, password });
 
-  if (error) {
-    setMessageCookie(res, 'error', error);
+    const { isMatch } = checkPassword({ password, hashPassword : user.password });
+  
+    if(!isMatch) {
+      setMessageCookie(res, 'error', 'Incorrect email or password.');
+      return res.render('login', { email, password });
+    }
+  
+    setUserCookie(req, user);
+  
+    return res.redirect('/urls');
+  }catch(error){
+    setMessageCookie(res, 'error', error.message);
     return res.render('login', { email, password });
   }
-
-  setUserCookie(req, user);
-
-  return res.redirect('/urls');
 }
 
 // This will render login page
