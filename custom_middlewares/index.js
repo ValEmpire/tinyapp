@@ -1,7 +1,7 @@
 const { getUserCookie, setMessageCookie } = require('../utils');
 const User = require("../models/User")
 
-const getUser = async (req, res, next) => {
+const authUser = async (req, res, next) => {
   try{
     const userID = getUserCookie(req);
 
@@ -26,5 +26,5 @@ const getUser = async (req, res, next) => {
 }
 
 module.exports = {
-  getUser
+  authUser
 }
