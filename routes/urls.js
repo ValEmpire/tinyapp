@@ -23,10 +23,8 @@ router.route("/new")
   .get(authUser, renderAddURLPageController);
 
 router.route("/:key")
-  .post(authUser, editURLController)
-  .get(authUser, readURLController);
-
-router.route("/:key/delete")
-  .post(authUser, deleteURLController);
+  .get(authUser, readURLController)
+  .put(authUser, editURLController)
+  .delete(authUser, deleteURLController);
 
 module.exports = router;
