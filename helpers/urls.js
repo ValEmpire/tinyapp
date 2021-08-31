@@ -14,9 +14,7 @@ const getURLSByUserID = async ({ userID }) => {
     }
 
   }catch(error){
-    return {
-      error: error.message
-    }
+    throw error;
   }
 }
 
@@ -29,9 +27,7 @@ const getURLByKey = async ({ key }) => {
     }
 
   }catch(error){
-    return {
-      error,
-    }
+    throw error;
   }
 }
 
@@ -44,9 +40,7 @@ const editURLByKey = async ({ key, userID, longURL }) => {
     }
 
   }catch(error){
-    return {
-      error,
-    }
+    throw error;
   }
 }
 
@@ -65,9 +59,7 @@ const addURL = async ({ longURL, userID }) => {
     };
 
   }catch(error){
-    return {
-      error,
-    };
+    throw error;
   }
 }
 
@@ -81,10 +73,7 @@ const deleteURL = async ({ key, userID }) => {
     return {};
 
   }catch(error){
-
-    return {
-      error,
-    }
+    throw error;
   }
 }
 
