@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // CUSTOM MIDDLEWARES
-const { getUser } = require("../custom_middlewares");
+const { authUser } = require("../custom_middlewares");
 
 // CONTROLLERS
 const { 
@@ -16,17 +16,17 @@ const {
 } = require("../controllers/urls");
 
 router.route("/")
-  .get(getUser, browseURLsByUserIDController)
-  .post(getUser, addURLController);
+  .get(authUser, browseURLsByUserIDController)
+  .post(authUser, addURLController);
 
 router.route("/new")
-  .get(getUser, renderAddURLPageController);
+  .get(authUser, renderAddURLPageController);
 
 router.route("/:key")
-  .post(getUser, editURLController)
-  .get(getUser, readURLController);
+  .post(authUser, editURLController)
+  .get(authUser, readURLController);
 
 router.route("/:key/delete")
-  .post(getUser, deleteURLController);
+  .post(authUser, deleteURLController);
 
 module.exports = router;
