@@ -25,27 +25,33 @@ const registerUser = async({ email, password }) => {
     };
 
   }catch(error){
-    return {
-      error: error.message,
-    }
+    throw error;
   }
 };
 
-const getUserByEmail = async({ email, password}) => {
+const checkPassword = ({ password, hashPassword }) => {
+  const isMatch = comparePassword(password, hashPassword);
+
+  if(!isMatch) throw new Error('Incorrect email or password.')
+
+  return {
+    isMatch,
+  }
+}
+
+const getUserByEmail = async({ email }) => {
   try{
     const user = await User.readByEmail(email);
 
-    if(!user || !comparePassword(password, user.password)) throw new Error('Incorrect credentials.');
+    if(!user) throw new Error('Incorrect email or password.');
 
     return {
       user,
     }
 
   }catch(error){
-    return {
-      error : error.message,
-    }
+    throw error;
   }
 }
 
-module.exports = { registerUser, getUserByEmail };
+module.exports = { registerUser, getUserByEmail, checkPassword };
