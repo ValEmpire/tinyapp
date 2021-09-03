@@ -7,7 +7,13 @@ const {
 } = require('../helpers/urls');
 
 const {
+  initUrlVisitor,
+  getURLVisitorsByURLKey,
+} = require('../helpers/urlVisitors');
+
+const {
   setMessageCookie,
+  generateRandomString,
 } = require("../utils");
 
 const browseURLsByUserIDController = async (req, res) => {
@@ -41,10 +47,16 @@ const readURLController = async (req, res) => {
   try{
     const { url } = await getURLByKey({ key, userID : user.id });
 
+    const longURL = url[Object.keys(url)[0]].longURL;
+
+    const { urlVisitors } = await getURLVisitorsByURLKey({ urlKey : key });
+
     return res.render("urls_show", {
       shortURL : key,
-      longURL : url.longURL,
+      longURL,
       user,
+      urlVisitors,
+      hostName: process.env.HOSTNAME || 'http://localhost:8080/u/'
     });
 
   }catch(error){
@@ -69,20 +81,12 @@ const editURLController = async (req, res) => {
 
     setMessageCookie(res, 'success', 'Updated successfully.');
 
-    return res.render('urls_show', {
-      shortURL : key,
-      longURL,
-      user,
-    });
+    return res.redirect('/urls');
 
   }catch(error){
     setMessageCookie(res, 'error', error.message);
 
-    return res.render('urls_show', {
-      shortURL : key,
-      longURL,
-      user,
-    });
+    return res.redirect('/urls');
   }
 }
 
@@ -94,9 +98,25 @@ const addURLController = async (req, res) => {
   const { user } = req;
 
   try{
-    const { url } = await addURL({ longURL, userID : user.id });
 
-    setMessageCookie(res, 'success', `${url[Object.keys(url)[0]]} created successfully.`)
+    const urlKey = generateRandomString();
+
+    const urlVisitorKey = generateRandomString();
+
+    await addURL({
+      key : urlKey,
+      longURL,
+      userID : user.id
+    });
+
+    // after we add new redirect url we will init urlvisitors
+    // this will add new key with initial value 
+    await initUrlVisitor({
+      key : urlVisitorKey,
+      urlKey
+    });
+
+    setMessageCookie(res, 'success', `New URL has been created successfully.`);
 
     return res.redirect('/urls');
 
@@ -116,7 +136,7 @@ const deleteURLController = async (req, res) => {
   try{
     await deleteURL({key, userID : user.id});
 
-    setMessageCookie(res, 'success', `${key} deleted successfully`);
+    setMessageCookie(res, 'success', `URL with ${key} has been deleted successfully.`);
 
     return res.redirect('/urls');
 

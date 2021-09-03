@@ -7,7 +7,7 @@ const {
 
 const { User } = require('../models/User');
 
-const registerUser = async({ email, password }) => {
+const registerUser = async({ key, email, password }) => {
 
   try{
     const isValidEmail = validateEmail(email);
@@ -16,9 +16,11 @@ const registerUser = async({ email, password }) => {
 
     if(password.length <= 5) throw new Error('Password should be atleast 6 characters long.');
 
-    const id = generateRandomString();
-
-    const user = await User.add({id, email:email.toLowerCase(), password : hashPassword(password)});
+    const user = await User.add({
+      id : key,
+      email : email.toLowerCase(),
+      password : hashPassword(password)
+    });
 
     return {
       user,

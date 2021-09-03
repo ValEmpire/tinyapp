@@ -50,16 +50,14 @@ class URL {
 
       const url = urls[key];
 
-      if(!url || !userID){
+      if(!url){
         reject(new Error(`Value of ${key} is not found.`));
         return;
       }
 
-      if(url.userID !== userID){
-        reject(new Error(`Not authorize to view someones url.`));
-      }
-
-      resolve(url);
+      resolve({
+        [key] : url
+      });
       return;
 
     });
@@ -105,7 +103,9 @@ class URL {
         userID,
       };
 
-      resolve(urls[key]);
+      resolve({
+        [key] : urls[key]
+      });
 
       return;
     });

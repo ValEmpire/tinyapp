@@ -14,10 +14,15 @@ const {
 
 const { users } = require('../models/User');
 
+const { generateRandomString } = require('../utils');
+
 describe('registerUser', () => {
   it('should add new user with hash password to the database', async () => {
 
+    const key = generateRandomString();
+
     const input = {
+      key,
       email : "val@example.com",
       password : "simple1"
     }

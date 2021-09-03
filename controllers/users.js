@@ -3,6 +3,7 @@ const {
   clearUserCookie,
   setMessageCookie,
   clearMessageCookie,
+  generateRandomString,
 } = require('../utils');
 
 const {
@@ -17,8 +18,10 @@ const {
 const addUser = async(req, res) => {
   const { email , password } = req.body;
 
+  const key = generateRandomString();
+
   try{
-    const { user } = await registerUser({ email, password });
+    const { user } = await registerUser({ key, email, password });
 
     setUserCookie(req, user);
   

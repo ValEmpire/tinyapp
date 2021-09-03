@@ -1,7 +1,6 @@
 const { URL } = require('../models/URL');
 
 const {
-  generateRandomString,
   appendURL
 } = require("../utils");
 
@@ -47,12 +46,10 @@ const editURL = async ({ key, userID, longURL }) => {
   }
 }
 
-const addURL = async ({ longURL, userID }) => {
+const addURL = async ({ key, longURL, userID }) => {
   try{
-    const randomKey = generateRandomString();
-
     const url = await URL.add({
-      key : randomKey,
+      key,
       longURL :  appendURL(longURL),
       userID,
     });
@@ -66,9 +63,6 @@ const addURL = async ({ longURL, userID }) => {
   }
 }
 
-// 
-// delete url then redirect to urls page
-// 
 const deleteURL = async ({ key, userID }) => {
   try{
     await URL.delete(key, userID);

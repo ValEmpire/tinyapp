@@ -15,6 +15,8 @@ const {
   deleteURL,
 } = require('../helpers/urls');
 
+const { generateRandomString } = require('../utils');
+
 const { urls } = require('../models/URL');
 
 describe('getURLSByUserID', () => {
@@ -61,8 +63,10 @@ describe('getURLByKey', () => {
     const { url } = await getURLByKey(input).should.not.be.rejected;
 
     const expectedOutput = {
-      longURL: 'https://www.facebook.com',
-      userID: 'val02',
+      abc01: {
+        longURL: "https://www.facebook.com",
+        userID: "val02"
+      }
     }
 
     assert.isObject(url);
@@ -115,7 +119,10 @@ describe('editURL', () => {
 
 describe('addURL', () => {
   it('should add and return updated newly added url object', async () => {
+    const key = generateRandomString();
+
     const input = {
+      key,
       userID : "val02",
       longURL : "https://www.youtube.com",
     }
@@ -123,8 +130,10 @@ describe('addURL', () => {
     const { url } = await addURL(input).should.not.be.rejected;
 
     const expectedOutput = {
-      longURL: "https://www.youtube.com",
-      userID: "val02"
+      [key] : {
+        longURL: "https://www.youtube.com",
+        userID: "val02"
+      }
     }
 
     assert.isObject(url);

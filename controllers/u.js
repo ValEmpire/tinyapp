@@ -1,17 +1,37 @@
-const URL = require('../models/URL');
+const { URL } = require('../models/URL');
+
+const { URLVisitor } = require('../models/URLVisitor');
+
+const { getUserCookie, generateRandomString, setUserCookie } = require('../utils');
 
 const URLRedirect = async (req, res) => {
-
   try{
 
     const { shortURL } = req.params;
 
     const url = await URL.read(shortURL);
 
-    return res.redirect(url["longURL"]);
+    const urlKey = Object.keys(url)[0];
+
+    // Since this endpoint is publicly accessible
+    // getUserCookie may return undefined
+    let userID = getUserCookie(req);
+
+    // generateRandomString and set another cookie session
+    if(!userID) {
+      userID = generateRandomString();
+      setUserCookie(req, { id : userID });
+    }
+
+    await URLVisitor.addUniqueVisitor({ urlKey, userID });
+
+    await URLVisitor.addVisitor({ urlKey, userID });
+
+    return res.redirect(url[urlKey].longURL);
 
   }catch(error){
 
+    console.log(error)
     return res.render('404', {
       error : `Cannot find redirect url.`,
       backURL : '/login'
