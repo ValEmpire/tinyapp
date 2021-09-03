@@ -32,6 +32,13 @@ const getURLByKey = async ({ key, userID }) => {
 
 const editURL = async ({ key, userID, longURL }) => {
   try{
+    if(longURL.includes(" ")){
+      throw new Error(`Looks like the url you input is invalid.`);
+    }
+
+    if(longURL.length < 4){
+      throw new Error(`Looks like the url you input is invalid.`);
+    }
 
     const appendhttp = appendURL(longURL);
 
@@ -48,6 +55,14 @@ const editURL = async ({ key, userID, longURL }) => {
 
 const addURL = async ({ key, longURL, userID }) => {
   try{
+    if(longURL.includes(" ")){
+      throw new Error(`Looks like the url you input is invalid.`);
+    }
+
+    if(longURL.length < 4){
+      throw new Error(`Looks like the url you input is invalid.`);
+    }
+
     const url = await URL.add({
       key,
       longURL :  appendURL(longURL),

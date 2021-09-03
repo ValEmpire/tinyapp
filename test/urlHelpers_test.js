@@ -115,6 +115,22 @@ describe('editURL', () => {
   it('should throw an error if key or userID or longURL is undefined', async () => {
     await editURL().should.be.rejectedWith(Error);
   });
+
+  it('should throw an error if url has spaces or less than 4 characters', async () => {
+    const input1 = {
+      key : "abc01",
+      userID : "other",
+      longURL : "https://www.l .com",
+    }
+    const input2 = {
+      key : "abc01",
+      userID : "other",
+      longURL : "fds",
+    }
+
+    await editURL(input1).should.be.rejectedWith(Error);
+    await editURL(input2).should.be.rejectedWith(Error);
+  });
 });
 
 describe('addURL', () => {
