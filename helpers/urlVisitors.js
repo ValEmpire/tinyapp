@@ -1,28 +1,24 @@
-const { URLVisitor } = require('../models/URLVisitor');
+const { URLVisitor } = require("../models/URLVisitor");
 
 const initUrlVisitor = async ({ key, urlKey }) => {
-  try{
-
+  try {
     await URLVisitor.init({ key, urlKey });
-
-  }catch(error){
+  } catch (error) {
     throw error;
   }
-}
+};
 
 const getURLVisitorsByURLKey = async ({ urlKey }) => {
-  try{
-
+  try {
     const urlVisitors = await URLVisitor.browseURLVisitorsByURLKey({ urlKey });
 
     return {
-      urlVisitors
+      urlVisitors,
     };
-
-  }catch(error){
+  } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   initUrlVisitor,

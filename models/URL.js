@@ -1,25 +1,23 @@
 const urls = {
-
   abc01: {
     longURL: "https://www.facebook.com",
-    userID: "val02"
+    userID: "val02",
   },
 
   abc02: {
     longURL: "https://www.stockoverflow.com",
-    userID: "val02"
+    userID: "val02",
   },
 
   abc03: {
     longURL: "https://www.google.com",
-    userID: "other"
+    userID: "other",
   },
 
   abc04: {
     longURL: "https://www.wikipedia.org",
-    userID: "other"
+    userID: "other",
   },
-
 };
 
 class URL {
@@ -30,13 +28,12 @@ class URL {
     this.add = this.add.bind(this);
     this.delete = this.delete.bind(this);
     this.browseURLsByUserID = this.browseURLsByUserID.bind(this);
-  };
+  }
 
   browse = () => {
     return new Promise((resolve, reject) => {
-
-      if(urls === undefined) {
-        reject(new Error('Urls is undefined.'))
+      if (urls === undefined) {
+        reject(new Error("Urls is undefined."));
         return;
       }
 
@@ -47,53 +44,48 @@ class URL {
 
   read = (key, userID) => {
     return new Promise((resolve, reject) => {
-
       const url = urls[key];
 
-      if(!url){
+      if (!url) {
         reject(new Error(`Value of ${key} is not found.`));
         return;
       }
 
       resolve({
-        [key] : url
+        [key]: url,
       });
       return;
-
     });
   };
 
   edit = (key, value, userID) => {
     return new Promise((resolve, reject) => {
-
       const url = urls[key];
 
-      if(!url) {
-        reject(new Error(`Value of ${key} is not found.`))
+      if (!url) {
+        reject(new Error(`Value of ${key} is not found.`));
         return;
       }
 
-      if(url["userID"] !== userID) {
-        reject(new Error(`Cannot update someones url.`))
+      if (url["userID"] !== userID) {
+        reject(new Error(`Cannot update someones url.`));
         return;
       }
 
-      url['longURL'] = value;
+      url["longURL"] = value;
 
       // return updated value
       return resolve({
-        [key] : url,
+        [key]: url,
       });
-      
     });
   };
 
-  add = ({key, longURL, userID}) => {
+  add = ({ key, longURL, userID }) => {
     return new Promise((resolve, reject) => {
-
       const url = urls[key];
 
-      if(url !== undefined) {
+      if (url !== undefined) {
         reject(new Error(`${key} already exists.`));
         return;
       }
@@ -104,7 +96,7 @@ class URL {
       };
 
       resolve({
-        [key] : urls[key]
+        [key]: urls[key],
       });
 
       return;
@@ -113,49 +105,46 @@ class URL {
 
   delete = (key, userID) => {
     return new Promise((resolve, reject) => {
-
       const url = urls[key];
 
-      if(!url) {
+      if (!url) {
         reject(new Error(`${key} does not exists.`));
         return;
       }
 
-      if(url["userID"] !== userID) {
-        reject(new Error(`Cannot delete someones url.`))
+      if (url["userID"] !== userID) {
+        reject(new Error(`Cannot delete someones url.`));
         return;
       }
 
-      resolve(delete urls[key])
+      resolve(delete urls[key]);
       return;
-
     });
   };
 
   browseURLsByUserID = (userID) => {
-    return new Promise((resolve, reject) =>{
-
-      if(urls === undefined) {
-        reject(new Error('Urls is undefined.'))
+    return new Promise((resolve, reject) => {
+      if (urls === undefined) {
+        reject(new Error("Urls is undefined."));
         return;
       }
 
       let result = {};
 
-      for(const key in urls){
-        if(urls[key].userID === userID){
-          result[key] = urls[key]; 
+      for (const key in urls) {
+        if (urls[key].userID === userID) {
+          result[key] = urls[key];
         }
       }
 
       resolve(result);
-    })
-  }
+    });
+  };
 }
 
 const NewURL = new URL();
 
 module.exports = {
-  URL : NewURL,
+  URL: NewURL,
   urls,
 };

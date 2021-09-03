@@ -5,8 +5,7 @@ const { URLVisitor } = require('../models/URLVisitor');
 const { getUserCookie, generateRandomString, setUserCookie } = require('../utils');
 
 const URLRedirect = async (req, res) => {
-  try{
-
+  try {
     const { shortURL } = req.params;
 
     const url = await URL.read(shortURL);
@@ -18,9 +17,9 @@ const URLRedirect = async (req, res) => {
     let userID = getUserCookie(req);
 
     // generateRandomString and set another cookie session
-    if(!userID) {
+    if (!userID) {
       userID = generateRandomString();
-      setUserCookie(req, { id : userID });
+      setUserCookie(req, { id: userID });
     }
 
     await URLVisitor.addUniqueVisitor({ urlKey, userID });
@@ -29,12 +28,10 @@ const URLRedirect = async (req, res) => {
 
     return res.redirect(url[urlKey].longURL);
 
-  }catch(error){
-
-    console.log(error)
+  } catch (error) {
     return res.render('404', {
-      error : `Cannot find redirect url.`,
-      backURL : '/login'
+      error: `Cannot find redirect url.`,
+      backURL: '/login'
     });
   }
 }

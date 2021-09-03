@@ -5,19 +5,36 @@
         <h4>Welcome back</h4>
       </div>
       <%- include('./partials/_logo') %>
-      <form method="post" action='/login'>
+      <form method="post" action="/login">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
-          <input required type="text" value="<%= locals.email %>" name='email' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <input
+            required
+            type="text"
+            value="<%= locals.email %>"
+            name="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+          />
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input required type="password" value="<%= locals.password %>" name='password' class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input
+            required
+            type="password"
+            value="<%= locals.password %>"
+            name="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+          />
         </div>
-        <div class='text-right'>
+        <div class="text-right">
           <span>Don't have an account? <a href="/registration">Create</a></span>
         </div>
-        <div class='text-center mt-3 pt-3'>
+        <div class="text-center mt-3 pt-3">
           <button type="submit" class="btn btn-info">Login</button>
         </div>
       </form>

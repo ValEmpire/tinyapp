@@ -1,12 +1,11 @@
 // the parameters is the name of the cookie we want to get
-const getCookieValue = (name) => (
-  document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
-);
+const getCookieValue = (name) =>
+  document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")?.pop() || "";
 
-let error = getCookieValue('error');
-let success = getCookieValue('success');
+let error = getCookieValue("error");
+let success = getCookieValue("success");
 
-if(error){
+if (error) {
   Toastify({
     text: decodeURIComponent(error), // remove %20 in white space
     backgroundColor: "linear-gradient(to right, #FFC105, #DC3545)",
@@ -14,7 +13,7 @@ if(error){
   }).showToast();
 }
 
-if(success){
+if (success) {
   Toastify({
     text: decodeURIComponent(success), // remove %20 in white space
     backgroundColor: "#28A745",

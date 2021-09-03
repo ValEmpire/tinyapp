@@ -6,7 +6,7 @@ const router = express.Router();
 const { authUser } = require("../custom_middlewares");
 
 // CONTROLLERS
-const { 
+const {
   browseURLsByUserIDController,
   readURLController,
   editURLController,
@@ -15,14 +15,15 @@ const {
   renderAddURLPageController,
 } = require("../controllers/urls");
 
-router.route("/")
+router
+  .route("/")
   .get(authUser, browseURLsByUserIDController)
   .post(authUser, addURLController);
 
-router.route("/new")
-  .get(authUser, renderAddURLPageController);
+router.route("/new").get(authUser, renderAddURLPageController);
 
-router.route("/:key")
+router
+  .route("/:key")
   .get(authUser, readURLController)
   .put(authUser, editURLController)
   .delete(authUser, deleteURLController);

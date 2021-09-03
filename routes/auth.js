@@ -11,18 +11,10 @@ const {
   logout,
 } = require("../controllers/users");
 
-router
-  .route("/registration")
-  .get(renderRegistrationPage)
-  .post(addUser);
+router.route("/registration").get(renderRegistrationPage).post(addUser);
 
-router
-  .route("/login")
-  .get(renderLoginPage)
-  .post(readUser);
+router.route("/login").get(renderLoginPage).post(readUser);
 
-router
-  .route("/logout")
-  .post(logout);
+router.route("/logout").post(logout);
 
 module.exports = router;
