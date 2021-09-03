@@ -1,10 +1,14 @@
-const { URL } = require('../models/URL');
+const { URL } = require("../models/URL");
 
-const { URLVisitor } = require('../models/URLVisitor');
+const { URLVisitor } = require("../models/URLVisitor");
 
-const { getUserCookie, generateRandomString, setUserCookie } = require('../utils');
+const {
+  getUserCookie,
+  generateRandomString,
+  setUserCookie,
+} = require("../utils");
 
-const URLRedirect = async (req, res) => {
+const URLRedirectController = async (req, res) => {
   try {
     const { shortURL } = req.params;
 
@@ -27,13 +31,12 @@ const URLRedirect = async (req, res) => {
     await URLVisitor.addVisitor({ urlKey, userID });
 
     return res.redirect(url[urlKey].longURL);
-
   } catch (error) {
-    return res.render('404', {
+    return res.render("404", {
       error: `Cannot find redirect url.`,
-      backURL: '/login'
+      backURL: "/login",
     });
   }
-}
+};
 
-module.exports = { URLRedirect }
+module.exports = { URLRedirectController };

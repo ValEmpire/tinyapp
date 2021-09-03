@@ -4,17 +4,20 @@ const router = express.Router();
 
 // Controllers
 const {
-  addUser,
-  readUser,
-  renderLoginPage,
-  renderRegistrationPage,
-  logout,
+  addUserController,
+  readUserController,
+  renderLoginPageController,
+  renderRegistrationPageController,
+  logoutController,
 } = require("../controllers/users");
 
-router.route("/registration").get(renderRegistrationPage).post(addUser);
+router
+  .route("/registration")
+  .get(renderRegistrationPageController)
+  .post(addUserController);
 
-router.route("/login").get(renderLoginPage).post(readUser);
+router.route("/login").get(renderLoginPageController).post(readUserController);
 
-router.route("/logout").post(logout);
+router.route("/logout").post(logoutController);
 
 module.exports = router;

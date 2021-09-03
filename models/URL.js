@@ -30,6 +30,7 @@ class URL {
     this.browseURLsByUserID = this.browseURLsByUserID.bind(this);
   }
 
+  // this will return all urls
   browse = () => {
     return new Promise((resolve, reject) => {
       if (urls === undefined) {
@@ -42,7 +43,8 @@ class URL {
     });
   };
 
-  read = (key, userID) => {
+  // this will return url by key
+  read = (key) => {
     return new Promise((resolve, reject) => {
       const url = urls[key];
 
@@ -58,6 +60,7 @@ class URL {
     });
   };
 
+  // this will edit url if userId is the same value of userID
   edit = (key, value, userID) => {
     return new Promise((resolve, reject) => {
       const url = urls[key];
@@ -95,14 +98,14 @@ class URL {
         userID,
       };
 
-      resolve({
+      // return object with new key and value of longURL and userID
+      return resolve({
         [key]: urls[key],
       });
-
-      return;
     });
   };
 
+  // this will only delete if userID is the same as url userID
   delete = (key, userID) => {
     return new Promise((resolve, reject) => {
       const url = urls[key];
@@ -122,6 +125,8 @@ class URL {
     });
   };
 
+  // will return urls by usersID
+  // this will make sure only urls of logged in user is allowed to access his own urls
   browseURLsByUserID = (userID) => {
     return new Promise((resolve, reject) => {
       if (urls === undefined) {

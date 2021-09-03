@@ -74,7 +74,7 @@ describe("getUserByEmail", () => {
     const expectedOutput = {
       id: "userRandomID",
       email: "user@example.com",
-      password: "purple-monkey-dinosaur",
+      password: "$2b$10$stCSDePX3HdPffb8OrEt8OCvnKbAkw9SyxWwCxuCfTeqhBwGmXLWq",
     };
 
     assert.deepEqual(user, expectedOutput);

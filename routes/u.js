@@ -2,8 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const { URLRedirect } = require("../controllers/u");
+const { URLRedirectController } = require("../controllers/u");
 
-router.route("/:shortURL").get(URLRedirect);
+router.route("/:shortURL").get(URLRedirectController);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const urlVisitors = {
-  // FORMAT initial
+  // INITIAL FORMAT
   // "abcde" : {
   //   urlKey : idOFUrl,
   //   totalVisits : 0,
@@ -20,23 +20,27 @@ class URLVisitor {
     this.init = this.init.bind(this);
   }
 
+  // I called this if user created new redirect url
+  // This will make sure we will attached the value of urlKey property
   init = ({ key, urlKey }) => {
     return new Promise((resolve, reject) => {
       if (!urlVisitors) {
         return reject(new Error("urlVisitors is not defined."));
       }
 
+      // initialize urlVisitors
       urlVisitors[key] = {
         urlKey,
         totalVisits: 0,
         totalUniqueVisitors: 0,
-        visitors: [],
+        visitors: [], // I used arrays instead of objects as I think its better to push objects with userId key and time as value
       };
 
       return resolve("Success");
     });
   };
 
+  // this will browse urlVisitors and look for urlKey
   browseURLVisitorsByURLKey = ({ urlKey }) => {
     return new Promise((resolve, reject) => {
       if (!urlVisitors) {
@@ -56,6 +60,7 @@ class URLVisitor {
     });
   };
 
+  // I used this for updating the visitor count and adding unique visitor
   findTarget = ({ obj, urlKey }) => {
     let target = {};
 
@@ -69,6 +74,8 @@ class URLVisitor {
     return target;
   };
 
+  // with arguments of urlKey and userID,
+  // this will push visitors everytime any users visit the shortURL link
   addVisitor = ({ urlKey, userID }) => {
     return new Promise((resolve, reject) => {
       const d = new Date();
@@ -90,6 +97,7 @@ class URLVisitor {
     });
   };
 
+  // this will add uniqueVisitor if userID is not found in visitors array
   addUniqueVisitor = ({ urlKey, userID }) => {
     return new Promise((resolve, reject) => {
       const target = this.findTarget({ obj: urlVisitors, urlKey });

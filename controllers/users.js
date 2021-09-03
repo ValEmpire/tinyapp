@@ -15,7 +15,7 @@ const {
 // this will add users to db with registerUser Function
 // if successful redirect to urls page
 // if error is present, set the messagecookie error then render registration page with email, password
-const addUser = async (req, res) => {
+const addUserController = async (req, res) => {
   const { email, password } = req.body;
 
   const key = generateRandomString();
@@ -36,7 +36,7 @@ const addUser = async (req, res) => {
 // this will retrieve users from db
 // if successful redirect to urls page
 // if error is present, set the messagecookie error then render login page with email, password
-const readUser = async (req, res) => {
+const readUserController = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -62,17 +62,17 @@ const readUser = async (req, res) => {
 };
 
 // This will render login page
-const renderLoginPage = async (req, res) => {
+const renderLoginPageController = async (req, res) => {
   return res.render("login");
 };
 
 // THis will render registration page
-const renderRegistrationPage = (req, res) => {
+const renderRegistrationPageController = (req, res) => {
   return res.render("registration");
 };
 
 // this will redirect to login page after clearning message cookies and users session
-const logout = (req, res) => {
+const logoutController = (req, res) => {
   clearMessageCookie(res);
 
   clearUserCookie(req);
@@ -81,9 +81,9 @@ const logout = (req, res) => {
 };
 
 module.exports = {
-  addUser,
-  readUser,
-  renderLoginPage,
-  renderRegistrationPage,
-  logout,
+  addUserController,
+  readUserController,
+  renderLoginPageController,
+  renderRegistrationPageController,
+  logoutController,
 };
