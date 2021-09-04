@@ -38,11 +38,11 @@ const setUserCookie = (req, user) => {
 
 // setMessageCookie
 // use for message toasts
-// I put the expiration 500 milliseconds
+// I put the expiration 1 second
 // Good enought to display the message as flash
 const setMessageCookie = (res, type, message) => {
   var date = new Date();
-  date.setTime(date.getTime() + 500);
+  date.setTime(date.getTime() + 1000);
   return res.cookie(type, message, { expires: date });
 };
 

@@ -1,4 +1,8 @@
-const { getUserCookie, setMessageCookie } = require("../utils");
+const {
+  getUserCookie,
+  setMessageCookie,
+  clearUserCookie,
+} = require("../utils");
 const { User } = require("../models/User");
 
 // we will call this in all protected routes
@@ -25,6 +29,9 @@ const authUser = async (req, res, next) => {
     next();
   } catch (error) {
     setMessageCookie(res, "error", error.message);
+
+    // clear cookie as it is not valid
+    clearUserCookie(req);
 
     res.redirect("/login");
 

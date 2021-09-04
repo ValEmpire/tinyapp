@@ -1,6 +1,7 @@
 const {
   setUserCookie,
   clearUserCookie,
+  getUserCookie,
   setMessageCookie,
   clearMessageCookie,
   generateRandomString,
@@ -63,11 +64,25 @@ const readUserController = async (req, res) => {
 
 // This will render login page
 const renderLoginPageController = async (req, res) => {
+  const isLoggedIn = getUserCookie(req);
+
+  // if cookie is present
+  if (isLoggedIn) {
+    return res.redirect("/urls");
+  }
+
   return res.render("login");
 };
 
 // THis will render registration page
 const renderRegistrationPageController = (req, res) => {
+  const isLoggedIn = getUserCookie(req);
+
+  // if cookie is present
+  if (isLoggedIn) {
+    return res.redirect("/urls");
+  }
+
   return res.render("registration");
 };
 
