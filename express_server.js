@@ -10,8 +10,11 @@ const morgan = require("morgan");
 const app = express();
 
 // Middlewares
-app.use(morgan("dev")); // development
-// app.use(morgan('combined')); // production
+if (app.get("env") === "development") {
+  app.use(morgan("dev")); // development
+} else {
+  app.use(morgan("combined")); // production
+}
 app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
