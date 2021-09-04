@@ -10,7 +10,7 @@ const morgan = require("morgan");
 const app = express();
 
 // Middlewares
-if (app.get("env") === "development") {
+if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev")); // development
 } else {
   app.use(morgan("combined")); // production
