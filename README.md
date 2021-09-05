@@ -47,6 +47,7 @@ This app was tested using mocha, chai and chai-as-promised.
 - `/login` renders login view. Logged in user will be redirected to `/urls` route.
 - `/registration` renders registration view. Logged in user will be redirected to `/urls` route.
 - `/u/:shortURL` redirects to longURL if found else redirect to 404 view.
+- `/*` renders 404 view.
 
 ##### Authenticated Routes - Not logged in user will be redirected to `/login`
 
