@@ -69,13 +69,13 @@ This app was tested using mocha, chai and chai-as-promised.
 
 ##### Authenticated Routes - Unauthorized user will be redirected to `/login`
 
-- `/urls:key` {longURL} required. Update the `key` params if user is the owner of the url. Throws and display error if any. Return to `/urls` with a successful message if successful.
+- `/urls/:key` {longURL} required. Update the `key` params if user is the owner of the url. Throws and display error if any. Return to `/urls` with a successful message if successful.
 
 #### DELETE
 
 ##### Authenticated Routes - Unauthorized user will be redirected to `/login`
 
-- `/urls:key` {longURL} required. Delete the `key` params if user is the owner of the url. Throws and display error if any. Return to `/urls` with a successful message if successful.
+- `/urls/:key` {longURL} required. Delete the `key` params if user is the owner of the url. Throws and display error if any. Return to `/urls` with a successful message if successful.
 
 ## Future update
 
