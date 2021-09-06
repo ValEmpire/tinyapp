@@ -4,11 +4,12 @@ TinyApp is a full stack web application built with EJS as a templating engine an
 
 ## Getting Started
 
-- This app is running in **node and nodejs v12.22.2**
-- `git clone git@github.com:ValEmpire/tinyapp.git tinyApp`
-- `cd tinyApp`
-- Install all dependencies (using the `npm install` command).
-- Run the development web server using the `npm run dev` command.
+#### This app is running in **node and nodejs v12.22.2**
+1. `git clone git@github.com:ValEmpire/tinyapp.git tinyApp`
+1. `cd tinyApp`
+1. Install all dependencies (using the `npm install` command).
+1. Run the development web server using the `npm run dev` command.
+1. Go to http://localhost:8080/ in your browser.
 
 ## Final Product
 
